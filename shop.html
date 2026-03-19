@@ -1,1 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - Moonlight Haven</title>
 
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #0b0f1a;
+      color: white;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 25px;
+      background: #111827;
+    }
+
+    .logo {
+      color: #00eaff;
+      font-weight: bold;
+    }
+
+    .links a {
+      margin-left: 15px;
+      text-decoration: none;
+      color: #ccc;
+    }
+
+    .links a:hover {
+      color: #00eaff;
+    }
+
+    .container {
+      padding: 25px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00eaff;
+    }
+
+    .subtitle {
+      text-align: center;
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      border-left: 4px solid #00eaff;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .card {
+      background: #111827;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #00eaff;
+    }
+
+    .icon {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .price {
+      color: gold;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">🌙 Moonlight</div>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="support.html">Support</a>
+    <a href="info.html">Info</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <h1>🛒 Future Items</h1>
+  <p class="subtitle">Moonlight Haven planned catalog (50 items)</p>
+
+  <div class="section">
+    <h2>📦 Items</h2>
+
+    <div class="grid">
+
+      <!-- 50 ITEMS -->
+
+      <div class="card"><div class="icon">🎟️</div><div class="name">Lottery Ticket</div><div class="price">1,000 MC</div></div>
+      <div class="card"><div class="icon">🐟</div><div class="name">Fish</div><div class="price">2,500 MC</div></div>
+      <div class="card"><div class="icon">💵</div><div class="name">Bank Note</div><div class="price">10,000 MC</div></div>
+      <div class="card"><div class="icon">🎁</div><div class="name">Mystery Box</div><div class="price">15,000 MC</div></div>
+
+      <div class="card"><div class="icon">⚡</div><div class="name">Energy Boost</div><div class="price">3,000 MC</div></div>
+      <div class="card"><div class="icon">👑</div><div class="name">VIP Pass</div><div class="price">50,000 MC</div></div>
+      <div class="card"><div class="icon">🔧</div><div class="name">Custom Command</div><div class="price">2,000,000 MC</div></div>
+      <div class="card"><div class="icon">🎫</div><div class="name">Event Pass</div><div class="price">5,000 MC</div></div>
+
+      <div class="card"><div class="icon">🧾</div><div class="name">Voucher</div><div class="price">8,000 MC</div></div>
+      <div class="card"><div class="icon">📢</div><div class="name">Server Promo</div><div class="price">1,000,000 MC</div></div>
+      <div class="card"><div class="icon">🔊</div><div class="name">Voice Boost</div><div class="price">4,000 MC</div></div>
+      <div class="card"><div class="icon">🪙</div><div class="name">Coin Pack</div><div class="price">20,000 MC</div></div>
+
+      <div class="card"><div class="icon">🎨</div><div class="name">Custom Emoji</div><div class="price">1,500 MC</div></div>
+      <div class="card"><div class="icon">📌</div><div class="name">Pinned Feature</div><div class="price">7,000 MC</div></div>
+      <div class="card"><div class="icon">🚀</div><div class="name">Boost Slot</div><div class="price">25,000 MC</div></div>
+      <div class="card"><div class="icon">🧠</div><div class="name">AI Command</div><div class="price">500,000 MC</div></div>
+
+      <div class="card"><div class="icon">🛡️</div><div class="name">Security Upgrade</div><div class="price">300,000 MC</div></div>
+      <div class="card"><div class="icon">🎯</div><div class="name">Target Reward</div><div class="price">12,000 MC</div></div>
+      <div class="card"><div class="icon">📦</div><div class="name">Loot Crate</div><div class="price">18,000 MC</div></div>
+      <div class="card"><div class="icon">🔑</div><div class="name">Access Key</div><div class="price">6,000 MC</div></div>
+
+      <div class="card"><div class="icon">🏆</div><div class="name">Winner Pass</div><div class="price">30,000 MC</div></div>
+      <div class="card"><div class="icon">📈</div><div class="name">Growth Pack</div><div class="price">40,000 MC</div></div>
+      <div class="card"><div class="icon">🎤</div><div class="name">Event Host</div><div class="price">100,000 MC</div></div>
+      <div class="card"><div class="icon">🧾</div><div class="name">Service Token</div><div class="price">9,000 MC</div></div>
+
+      <div class="card"><div class="icon">💎</div><div class="name">Premium Pack</div><div class="price">75,000 MC</div></div>
+      <div class="card"><div class="icon">🔔</div><div class="name">Announcement Ping</div><div class="price">2,000 MC</div></div>
+      <div class="card"><div class="icon">🧩</div><div class="name">Addon Feature</div><div class="price">15,000 MC</div></div>
+      <div class="card"><div class="icon">📊</div><div class="name">Analytics Access</div><div class="price">60,000 MC</div></div>
+
+      <div class="card"><div class="icon">🪄</div><div class="name">Magic Roll</div><div class="price">22,000 MC</div></div>
+      <div class="card"><div class="icon">⚙️</div><div class="name">System Upgrade</div><div class="price">120,000 MC</div></div>
+      <div class="card"><div class="icon">🧱</div><div class="name">Builder Pack</div><div class="price">35,000 MC</div></div>
+      <div class="card"><div class="icon">🎮</div><div class="name">Game Token</div><div class="price">14,000 MC</div></div>
+
+      <div class="card"><div class="icon">📡</div><div class="name">Signal Boost</div><div class="price">9,500 MC</div></div>
+      <div class="card"><div class="icon">🧾</div><div class="name">Receipt Pack</div><div class="price">5,500 MC</div></div>
+      <div class="card"><div class="icon">🔓</div><div class="name">Unlock Token</div><div class="price">11,000 MC</div></div>
+      <div class="card"><div class="icon">🧿</div><div class="name">Lucky Charm</div><div class="price">8,800 MC</div></div>
+
+      <div class="card"><div class="icon">📣</div><div class="name">Ad Slot</div><div class="price">250,000 MC</div></div>
+      <div class="card"><div class="icon">🧑‍💼</div><div class="name">Staff Pass</div><div class="price">500,000 MC</div></div>
+      <div class="card"><div class="icon">📌</div><div class="name">Highlight Message</div><div class="price">3,500 MC</div></div>
+      <div class="card"><div class="icon">🧰</div><div class="name">Tool Kit</div><div class="price">17,000 MC</div></div>
+
+      <div class="card"><div class="icon">🎧</div><div class="name">Audio Pack</div><div class="price">6,500 MC</div></div>
+      <div class="card"><div class="icon">🖼️</div><div class="name">Media Slot</div><div class="price">4,500 MC</div></div>
+      <div class="card"><div class="icon">🧾</div><div class="name">Contract Token</div><div class="price">45,000 MC</div></div>
+      <div class="card"><div class="icon">🔗</div><div class="name">Link Boost</div><div class="price">2,200 MC</div></div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+  </html>
