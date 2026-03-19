@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop - Moonlight Haven</title>
+  <title>Moonlight Shop</title>
 
   <style>
     body {
@@ -50,12 +50,6 @@
       margin-bottom: 20px;
     }
 
-    .section h2 {
-      border-left: 4px solid #00eaff;
-      padding-left: 10px;
-      margin-bottom: 15px;
-    }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -68,6 +62,7 @@
       border-radius: 12px;
       text-align: center;
       border: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
       transition: 0.2s;
     }
 
@@ -77,8 +72,8 @@
     }
 
     .icon {
-      font-size: 26px;
-      margin-bottom: 8px;
+      font-size: 36px;
+      margin-bottom: 10px;
     }
 
     .name {
@@ -90,6 +85,58 @@
       color: gold;
       font-weight: bold;
     }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #111827;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .close {
+      float: right;
+      cursor: pointer;
+      color: red;
+      font-size: 20px;
+    }
+
+    .modal-icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .modal-price {
+      color: gold;
+      margin-bottom: 10px;
+    }
+
+    .modal-desc {
+      font-size: 14px;
+      opacity: 0.8;
+    }
   </style>
 </head>
 
@@ -98,84 +145,92 @@
 <nav>
   <div class="logo">🌙 Moonlight</div>
   <div class="links">
-    <a href="index.html">Home</a>
-    <a href="shop/">Shop</a>
-    <a href="support/">Support</a>
-    <a href="info/">Info</a>
+    <a href="../">Home</a>
+    <a href="../shop/">Shop</a>
+    <a href="../support/">Support</a>
+    <a href="../info/">Info</a>
   </div>
 </nav>
 
 <div class="container">
 
-  <h1>🛒 Future Items</h1>
-  <p class="subtitle">Moonlight Haven planned catalog (50 items)</p>
+  <h1>🛒 Moonlight Shop</h1>
+  <p class="subtitle">Click an item to view details</p>
 
-  <div class="section">
-    <h2>📦 Items</h2>
+  <div class="grid">
 
-    <div class="grid">
-
-      <!-- 50 ITEMS -->
-
-      <div class="card"><div class="icon">🎟️</div><div class="name">Lottery Ticket</div><div class="price">1,000 MC</div></div>
-      <div class="card"><div class="icon">🐟</div><div class="name">Fish</div><div class="price">2,500 MC</div></div>
-      <div class="card"><div class="icon">💵</div><div class="name">Bank Note</div><div class="price">10,000 MC</div></div>
-      <div class="card"><div class="icon">🎁</div><div class="name">Mystery Box</div><div class="price">15,000 MC</div></div>
-
-      <div class="card"><div class="icon">⚡</div><div class="name">Energy Boost</div><div class="price">3,000 MC</div></div>
-      <div class="card"><div class="icon">👑</div><div class="name">VIP Pass</div><div class="price">50,000 MC</div></div>
-      <div class="card"><div class="icon">🔧</div><div class="name">Custom Command</div><div class="price">2,000,000 MC</div></div>
-      <div class="card"><div class="icon">🎫</div><div class="name">Event Pass</div><div class="price">5,000 MC</div></div>
-
-      <div class="card"><div class="icon">🧾</div><div class="name">Voucher</div><div class="price">8,000 MC</div></div>
-      <div class="card"><div class="icon">📢</div><div class="name">Server Promo</div><div class="price">1,000,000 MC</div></div>
-      <div class="card"><div class="icon">🔊</div><div class="name">Voice Boost</div><div class="price">4,000 MC</div></div>
-      <div class="card"><div class="icon">🪙</div><div class="name">Coin Pack</div><div class="price">20,000 MC</div></div>
-
-      <div class="card"><div class="icon">🎨</div><div class="name">Custom Emoji</div><div class="price">1,500 MC</div></div>
-      <div class="card"><div class="icon">📌</div><div class="name">Pinned Feature</div><div class="price">7,000 MC</div></div>
-      <div class="card"><div class="icon">🚀</div><div class="name">Boost Slot</div><div class="price">25,000 MC</div></div>
-      <div class="card"><div class="icon">🧠</div><div class="name">AI Command</div><div class="price">500,000 MC</div></div>
-
-      <div class="card"><div class="icon">🛡️</div><div class="name">Security Upgrade</div><div class="price">300,000 MC</div></div>
-      <div class="card"><div class="icon">🎯</div><div class="name">Target Reward</div><div class="price">12,000 MC</div></div>
-      <div class="card"><div class="icon">📦</div><div class="name">Loot Crate</div><div class="price">18,000 MC</div></div>
-      <div class="card"><div class="icon">🔑</div><div class="name">Access Key</div><div class="price">6,000 MC</div></div>
-
-      <div class="card"><div class="icon">🏆</div><div class="name">Winner Pass</div><div class="price">30,000 MC</div></div>
-      <div class="card"><div class="icon">📈</div><div class="name">Growth Pack</div><div class="price">40,000 MC</div></div>
-      <div class="card"><div class="icon">🎤</div><div class="name">Event Host</div><div class="price">100,000 MC</div></div>
-      <div class="card"><div class="icon">🧾</div><div class="name">Service Token</div><div class="price">9,000 MC</div></div>
-
-      <div class="card"><div class="icon">💎</div><div class="name">Premium Pack</div><div class="price">75,000 MC</div></div>
-      <div class="card"><div class="icon">🔔</div><div class="name">Announcement Ping</div><div class="price">2,000 MC</div></div>
-      <div class="card"><div class="icon">🧩</div><div class="name">Addon Feature</div><div class="price">15,000 MC</div></div>
-      <div class="card"><div class="icon">📊</div><div class="name">Analytics Access</div><div class="price">60,000 MC</div></div>
-
-      <div class="card"><div class="icon">🪄</div><div class="name">Magic Roll</div><div class="price">22,000 MC</div></div>
-      <div class="card"><div class="icon">⚙️</div><div class="name">System Upgrade</div><div class="price">120,000 MC</div></div>
-      <div class="card"><div class="icon">🧱</div><div class="name">Builder Pack</div><div class="price">35,000 MC</div></div>
-      <div class="card"><div class="icon">🎮</div><div class="name">Game Token</div><div class="price">14,000 MC</div></div>
-
-      <div class="card"><div class="icon">📡</div><div class="name">Signal Boost</div><div class="price">9,500 MC</div></div>
-      <div class="card"><div class="icon">🧾</div><div class="name">Receipt Pack</div><div class="price">5,500 MC</div></div>
-      <div class="card"><div class="icon">🔓</div><div class="name">Unlock Token</div><div class="price">11,000 MC</div></div>
-      <div class="card"><div class="icon">🧿</div><div class="name">Lucky Charm</div><div class="price">8,800 MC</div></div>
-
-      <div class="card"><div class="icon">📣</div><div class="name">Ad Slot</div><div class="price">250,000 MC</div></div>
-      <div class="card"><div class="icon">🧑‍💼</div><div class="name">Staff Pass</div><div class="price">500,000 MC</div></div>
-      <div class="card"><div class="icon">📌</div><div class="name">Highlight Message</div><div class="price">3,500 MC</div></div>
-      <div class="card"><div class="icon">🧰</div><div class="name">Tool Kit</div><div class="price">17,000 MC</div></div>
-
-      <div class="card"><div class="icon">🎧</div><div class="name">Audio Pack</div><div class="price">6,500 MC</div></div>
-      <div class="card"><div class="icon">🖼️</div><div class="name">Media Slot</div><div class="price">4,500 MC</div></div>
-      <div class="card"><div class="icon">🧾</div><div class="name">Contract Token</div><div class="price">45,000 MC</div></div>
-      <div class="card"><div class="icon">🔗</div><div class="name">Link Boost</div><div class="price">2,200 MC</div></div>
-
+    <div class="card" onclick="openModal('🎟️','Lottery Ticket','1,000 MC','Join the lottery and stand a chance to win rewards.')">
+      <div class="icon">🎟️</div>
+      <div class="name">Lottery Ticket</div>
+      <div class="price">1,000 MC</div>
     </div>
+
+    <div class="card" onclick="openModal('🐟','Fish','2,500 MC','A collectible item used for fun and trading.')">
+      <div class="icon">🐟</div>
+      <div class="name">Fish</div>
+      <div class="price">2,500 MC</div>
+    </div>
+
+    <div class="card" onclick="openModal('💵','Bank Note','10,000 MC','Represents stored value within the system.')">
+      <div class="icon">💵</div>
+      <div class="name">Bank Note</div>
+      <div class="price">10,000 MC</div>
+    </div>
+
+    <div class="card" onclick="openModal('🎁','Mystery Box','15,000 MC','Contains random rewards when opened.')">
+      <div class="icon">🎁</div>
+      <div class="name">Mystery Box</div>
+      <div class="price">15,000 MC</div>
+    </div>
+
+    <div class="card" onclick="openModal('👑','VIP Pass','50,000 MC','Unlock premium perks and recognition.')">
+      <div class="icon">👑</div>
+      <div class="name">VIP Pass</div>
+      <div class="price">50,000 MC</div>
+    </div>
+
+    <div class="card" onclick="openModal('⚡','Boost Pack','3,000 MC','Temporary boost to activity rewards.')">
+      <div class="icon">⚡</div>
+      <div class="name">Boost Pack</div>
+      <div class="price">3,000 MC</div>
+    </div>
+
   </div>
 
 </div>
 
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">✖</span>
+
+    <div class="modal-icon" id="modalIcon"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-price" id="modalPrice"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+  </div>
+</div>
+
+<script>
+  function openModal(icon, title, price, desc) {
+    document.getElementById("modalIcon").innerText = icon;
+    document.getElementById("modalTitle").innerText = title;
+    document.getElementById("modalPrice").innerText = price;
+    document.getElementById("modalDesc").innerText = desc;
+    document.getElementById("modal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    let modal = document.getElementById("modal");
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
 </body>
-  </html>
+</html>  </html>
