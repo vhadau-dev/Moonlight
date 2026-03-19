@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Moonlight Shop</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moonlight Haven Shop</title>
 
   <style>
     body {
       margin: 0;
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: #0b0f1a;
       color: white;
     }
 
+    /* NAVBAR */
     nav {
       display: flex;
       justify-content: space-around;
       background: #111827;
       padding: 15px;
+      position: sticky;
+      top: 0;
     }
 
     nav a {
@@ -25,62 +29,89 @@
       font-weight: bold;
     }
 
-    h1 {
+    /* HEADER */
+    .header {
       text-align: center;
-      margin-top: 20px;
+      padding: 30px 20px;
     }
 
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .header p {
+      opacity: 0.7;
+      margin-top: 5px;
+    }
+
+    /* SECTIONS */
     .section {
       padding: 20px;
     }
 
     .section h2 {
-      margin-bottom: 10px;
       border-left: 4px solid #00eaff;
       padding-left: 10px;
+      margin-bottom: 15px;
     }
 
+    /* GRID */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 15px;
     }
 
+    /* CARD */
     .card {
       background: #111827;
       padding: 15px;
-      border-radius: 12px;
+      border-radius: 14px;
       text-align: center;
       border: 1px solid rgba(255,255,255,0.05);
       transition: 0.2s;
     }
 
     .card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       border-color: #00eaff;
+      box-shadow: 0 0 10px rgba(0,234,255,0.2);
     }
 
-    .icon {
-      width: 50px;
-      height: 50px;
-      margin-bottom: 10px;
+    .title {
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
     .price {
       color: gold;
-      margin-top: 8px;
       font-weight: bold;
+      margin-top: 8px;
     }
 
+    /* NOTE BOX */
     .note {
-      background: #111827;
       margin: 20px;
       padding: 15px;
+      background: #111827;
       border-radius: 10px;
       font-size: 14px;
       opacity: 0.85;
       border: 1px solid rgba(255,255,255,0.05);
     }
+
+    /* TAGS */
+    .tag {
+      display: inline-block;
+      background: #00eaff;
+      color: black;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
   </style>
 </head>
 
@@ -93,59 +124,68 @@
   <a href="#">Info</a>
 </nav>
 
-<h1>🌙 Moonlight Haven Shop</h1>
+<div class="header">
+  <h1>🌙 Moonlight Haven Shop</h1>
+  <p>Discord Services & Rewards Marketplace</p>
+</div>
 
+<!-- SERVICES -->
 <div class="section">
   <h2>💎 Services</h2>
 
   <div class="grid">
 
     <div class="card">
-      <img class="icon" src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png">
-      Partnership
+      <div class="tag">Service</div>
+      <div class="title">Partnership</div>
       <div class="price">1,000 MC</div>
     </div>
 
     <div class="card">
-      <img class="icon" src="https://cdn-icons-png.flaticon.com/512/1828/1828665.png">
-      Ban Appeal
+      <div class="tag">Service</div>
+      <div class="title">Ban Appeal</div>
       <div class="price">20,000 MC</div>
     </div>
 
     <div class="card">
-      Event Promotion
+      <div class="tag">Service</div>
+      <div class="title">Promote Event</div>
       <div class="price">5,000,000 MC</div>
     </div>
 
     <div class="card">
-      Server Feature
+      <div class="tag">Service</div>
+      <div class="title">Feature Server</div>
       <div class="price">1,000,000 MC</div>
     </div>
 
     <div class="card">
-      Custom Role (1 Week)
+      <div class="tag">Service</div>
+      <div class="title">Custom Role</div>
       <div class="price">500,000 MC</div>
     </div>
 
     <div class="card">
-      Custom Bot Command
+      <div class="tag">Service</div>
+      <div class="title">Bot Command</div>
       <div class="price">2,000,000 MC</div>
     </div>
 
   </div>
 </div>
 
+<!-- REWARDS -->
 <div class="section">
   <h2>🔹 Invite Rewards</h2>
 
   <div class="grid">
 
-    <div class="card">1 Invite<div class="price">1,000 MC</div></div>
-    <div class="card">5 Invites<div class="price">5,000 MC</div></div>
-    <div class="card">10 Invites<div class="price">10,000 MC</div></div>
-    <div class="card">20 Invites<div class="price">20,000 MC</div></div>
-    <div class="card">50 Invites<div class="price">50,000 MC</div></div>
-    <div class="card">100 Invites<div class="price">100,000 MC</div></div>
+    <div class="card"><div class="title">1 Invite</div><div class="price">1,000 MC</div></div>
+    <div class="card"><div class="title">5 Invites</div><div class="price">5,000 MC</div></div>
+    <div class="card"><div class="title">10 Invites</div><div class="price">10,000 MC</div></div>
+    <div class="card"><div class="title">20 Invites</div><div class="price">20,000 MC</div></div>
+    <div class="card"><div class="title">50 Invites</div><div class="price">50,000 MC</div></div>
+    <div class="card"><div class="title">100 Invites</div><div class="price">100,000 MC</div></div>
 
   </div>
 </div>
@@ -157,86 +197,4 @@ All transactions are handled automatically by the bot.
 </div>
 
 </body>
-</html>    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .card {
-      background: #111827;
-      padding: 15px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .price {
-      color: gold;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .note {
-      background: #111827;
-      margin: 20px;
-      padding: 15px;
-      border-radius: 10px;
-      font-size: 14px;
-      opacity: 0.8;
-    }
-  </style>
-</head>
-
-<body>
-
-<nav>
-  <a href="#">Home</a>
-  <a href="#">Shop</a>
-  <a href="#">Support</a>
-  <a href="#">Info</a>
-</nav>
-
-<h1>🌙 Moonlight Haven Shop</h1>
-
-<div class="section">
-  <h2>💎 Services</h2>
-
-  <div class="grid">
-    <div class="card">Partnership<div class="price">1,000 MC</div></div>
-    <div class="card">Ban Appeal<div class="price">20,000 MC</div></div>
-    <div class="card">Promote Event<div class="price">5,000,000 MC</div></div>
-    <div class="card">Feature Server<div class="price">1,000,000 MC</div></div>
-    <div class="card">Custom Role (1 week)<div class="price">500,000 MC</div></div>
-    <div class="card">Custom Bot Command<div class="price">2,000,000 MC</div></div>
-    <div class="card">Boost Visibility<div class="price">3,000 MC</div></div>
-    <div class="card">Add Emoji<div class="price">1,500 MC</div></div>
-    <div class="card">Sponsor Giveaway<div class="price">4,000,000 MC</div></div>
-    <div class="card">Verification Priority<div class="price">6,000,000 MC</div></div>
-  </div>
-</div>
-
-<div class="section">
-  <h2>🔹 Invite Rewards</h2>
-
-  <div class="grid">
-    <div class="card">1 Invite<div class="price">1,000 MC</div></div>
-    <div class="card">5 Invites<div class="price">5,000 MC</div></div>
-    <div class="card">10 Invites<div class="price">10,000 MC</div></div>
-    <div class="card">20 Invites<div class="price">20,000 MC</div></div>
-    <div class="card">50 Invites<div class="price">50,000 MC</div></div>
-    <div class="card">100 Invites<div class="price">100,000 MC</div></div>
-    <div class="card">200 Invites<div class="price">200,000 MC</div></div>
-    <div class="card">500 Invites<div class="price">500,000 MC</div></div>
-    <div class="card">1,000 Invites<div class="price">1,000,000 MC</div></div>
-    <div class="card">5,000 Invites<div class="price">5,000,000 MC</div></div>
-  </div>
-</div>
-
-<div class="note">
-✨ Moonlight Coins (MC) are the official currency of the community.<br>
-All transactions are handled automatically by the bot.<br><br>
-📌 Complete the task and send proof to claim rewards.
-</div>
-
-</body>
-</html>
+  </html>
