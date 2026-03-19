@@ -1,21 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Moonlight Haven</title>
 
   <style>
     body {
       margin: 0;
       font-family: Arial;
-      background: #0b0f1a;
       color: white;
+
+      /* Background image */
+      background: url("https://files.catbox.moe/styjan.jpg") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    /* Dark overlay for readability */
+    .overlay {
+      background: rgba(0, 0, 0, 0.65);
+      min-height: 100vh;
     }
 
     nav {
       display: flex;
       justify-content: space-between;
       padding: 15px 25px;
-      background: #111827;
+      background: rgba(17, 24, 39, 0.9);
     }
 
     .logo {
@@ -34,19 +45,21 @@
     }
 
     .hero {
-      padding: 50px 25px;
       text-align: center;
+      padding: 80px 20px;
+      max-width: 800px;
+      margin: auto;
     }
 
     .hero h1 {
-      font-size: 32px;
+      font-size: 36px;
+      color: #00eaff;
     }
 
     .hero p {
-      max-width: 600px;
-      margin: 15px auto;
-      opacity: 0.8;
-      line-height: 1.6;
+      margin-top: 15px;
+      line-height: 1.7;
+      opacity: 0.9;
     }
 
     .buttons {
@@ -68,35 +81,39 @@
 
 <body>
 
-<nav>
-  <div class="logo">🌙 Moonlight</div>
-  <div class="links">
-    <a href="index.html">Home</a>
-    <a href="shop.html">Shop</a>
-    <a href="support.html">Support</a>
-    <a href="info.html">Info</a>
+<div class="overlay">
+
+  <nav>
+    <div class="logo">🌙 Moonlight</div>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="support.html">Support</a>
+      <a href="info.html">Info</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h1>Welcome to Moonlight Haven</h1>
+
+    <p>
+      Moonlight Haven is a growing community built around connection, rewards, and services.
+      Earn Moonlight Coins (MC), participate in events, invite others, and unlock exclusive features
+      through our shop system.
+    </p>
+
+    <p>
+      Everything is powered by automation and community engagement, making it easy to participate,
+      earn, and enjoy.
+    </p>
+
+    <div class="buttons">
+      <a href="shop.html">Go to Shop</a>
+      <a href="support.html">Get Support</a>
+      <a href="info.html">Learn More</a>
+    </div>
   </div>
-</nav>
 
-<div class="hero">
-  <h1>Welcome to Moonlight Haven</h1>
-
-  <p>
-    Moonlight Haven is a growing community built around connection, rewards, and services.
-    Here you can participate in events, earn Moonlight Coins (MC), and unlock services
-    such as promotions, custom roles, partnerships, and more.
-  </p>
-
-  <p>
-    Our ecosystem is powered by automation through bots, allowing users to complete tasks,
-    earn rewards, and interact with the community in a structured and fair environment.
-  </p>
-
-  <div class="buttons">
-    <a href="shop.html">Go to Shop</a>
-    <a href="support.html">Get Support</a>
-    <a href="info.html">Learn More</a>
-  </div>
 </div>
 
 </body>
