@@ -1,125 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moonlight Haven Shop</title>
+  <title>Moonlight Haven</title>
 
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       background: #0b0f1a;
-      color: #ffffff;
+      color: white;
     }
 
-    /* NAV */
     nav {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       padding: 15px 25px;
       background: #111827;
-      position: sticky;
-      top: 0;
     }
 
-    nav .logo {
-      font-weight: bold;
+    .logo {
       color: #00eaff;
+      font-weight: bold;
     }
 
-    nav .links a {
+    .links a {
       margin-left: 15px;
       text-decoration: none;
       color: #ccc;
-      font-size: 14px;
     }
 
-    nav .links a:hover {
+    .links a:hover {
       color: #00eaff;
     }
 
-    /* HEADER */
     .hero {
+      padding: 50px 25px;
       text-align: center;
-      padding: 40px 20px;
     }
 
     .hero h1 {
-      margin: 0;
       font-size: 32px;
     }
 
     .hero p {
-      opacity: 0.7;
-      margin-top: 8px;
+      max-width: 600px;
+      margin: 15px auto;
+      opacity: 0.8;
+      line-height: 1.6;
     }
 
-    /* SECTIONS */
-    .section {
-      padding: 20px 25px;
+    .buttons {
+      margin-top: 25px;
     }
 
-    .section h2 {
-      margin-bottom: 15px;
-      font-size: 18px;
-      border-left: 4px solid #00eaff;
-      padding-left: 10px;
-    }
-
-    /* GRID */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 15px;
-    }
-
-    /* CARD */
-    .card {
-      background: #111827;
-      padding: 18px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.05);
-      transition: 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: #00eaff;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    }
-
-    .card .title {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .card .price {
-      color: gold;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .tag {
+    .buttons a {
       display: inline-block;
-      font-size: 12px;
-      padding: 3px 8px;
-      border-radius: 6px;
+      margin: 10px;
+      padding: 12px 18px;
       background: #00eaff;
       color: black;
-      margin-bottom: 8px;
-    }
-
-    /* FOOTER NOTE */
-    .note {
-      margin: 25px;
-      padding: 15px;
-      background: #111827;
-      border-radius: 10px;
-      font-size: 14px;
-      opacity: 0.85;
-      border: 1px solid rgba(255,255,255,0.05);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -129,84 +71,33 @@
 <nav>
   <div class="logo">🌙 Moonlight</div>
   <div class="links">
-    <a href="#">Home</a>
-    <a href="#">Shop</a>
-    <a href="#">Support</a>
-    <a href="#">Info</a>
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="support.html">Support</a>
+    <a href="info.html">Info</a>
   </div>
 </nav>
 
 <div class="hero">
-  <h1>Moonlight Haven Shop</h1>
-  <p>Discord Services & Reward Marketplace</p>
-</div>
+  <h1>Welcome to Moonlight Haven</h1>
 
-<!-- SERVICES -->
-<div class="section">
-  <h2>💎 Services</h2>
+  <p>
+    Moonlight Haven is a growing community built around connection, rewards, and services.
+    Here you can participate in events, earn Moonlight Coins (MC), and unlock services
+    such as promotions, custom roles, partnerships, and more.
+  </p>
 
-  <div class="grid">
+  <p>
+    Our ecosystem is powered by automation through bots, allowing users to complete tasks,
+    earn rewards, and interact with the community in a structured and fair environment.
+  </p>
 
-    <div class="card">
-      <div class="tag">Service</div>
-      <div class="title">Partnership</div>
-      <div class="price">1,000 MC</div>
-    </div>
-
-    <div class="card">
-      <div class="tag">Service</div>
-      <div class="title">Ban Appeal</div>
-      <div class="price">20,000 MC</div>
-    </div>
-
-    <div class="card">
-      <div class="tag">Promo</div>
-      <div class="title">Event Promotion</div>
-      <div class="price">5,000,000 MC</div>
-    </div>
-
-    <div class="card">
-      <div class="tag">Feature</div>
-      <div class="title">Server Feature</div>
-      <div class="price">1,000,000 MC</div>
-    </div>
-
-    <div class="card">
-      <div class="tag">Role</div>
-      <div class="title">Custom Role</div>
-      <div class="price">500,000 MC</div>
-    </div>
-
-    <div class="card">
-      <div class="tag">Bot</div>
-      <div class="title">Custom Command</div>
-      <div class="price">2,000,000 MC</div>
-    </div>
-
+  <div class="buttons">
+    <a href="shop.html">Go to Shop</a>
+    <a href="support.html">Get Support</a>
+    <a href="info.html">Learn More</a>
   </div>
-</div>
-
-<!-- REWARDS -->
-<div class="section">
-  <h2>🔹 Invite Rewards</h2>
-
-  <div class="grid">
-
-    <div class="card"><div class="tag">Invite</div><div class="title">1 Invite</div><div class="price">1,000 MC</div></div>
-    <div class="card"><div class="tag">Invite</div><div class="title">5 Invites</div><div class="price">5,000 MC</div></div>
-    <div class="card"><div class="tag">Invite</div><div class="title">10 Invites</div><div class="price">10,000 MC</div></div>
-    <div class="card"><div class="tag">Invite</div><div class="title">20 Invites</div><div class="price">20,000 MC</div></div>
-    <div class="card"><div class="tag">Invite</div><div class="title">50 Invites</div><div class="price">50,000 MC</div></div>
-    <div class="card"><div class="tag">Invite</div><div class="title">100 Invites</div><div class="price">100,000 MC</div></div>
-
-  </div>
-</div>
-
-<div class="note">
-✨ Moonlight Coins (MC) are the official currency of the community.<br><br>
-📌 Complete tasks and send proof to claim rewards.<br>
-All transactions are handled automatically by the bot.
 </div>
 
 </body>
-</html>
+</html> 
