@@ -1,0 +1,434 @@
+{
+  "120363421367069062@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363404901932398@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363426798585681@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": true,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363424570705698@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363404500813701@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "Hello @user to *@gname* don't forget to introduce you self and user `.mods` fore support and user `.menu` fore more cmds be active fore giveaways to win more coins @p",
+    "leaveEnabled": true,
+    "leaveMessage": "@user left at least where don't care",
+    "antilink": {
+      "enabled": true,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": true,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363400061711508@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "Hello @user to *@gname* don't forget to introduce you self and user `.mods` fore support and user `.menu` fore more cmds be active fore giveaways to win more coins @p",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363424086411852@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363402830334439@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "Hello @user to *@gname* don't forget to introduce you self and user `.mods` fore support and user `.menu` fore more cmds be active fore giveaways to win more coins @p",
+    "leaveEnabled": true,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363426606453225@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363423446381521@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "hello @user welcomed to *@gname* please introduce youself and do\n`.menu` to see my cmds\nDo\n`.mods` fore support\nDo\n`.links` to share the fun\nDo\n`.bal` to see you balance\nHave fun @p",
+    "leaveEnabled": true,
+    "leaveMessage": "goodbye @user good thing where won't miss you",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363407934658697@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363422547731424@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "hello @user to *@gname*\n- help by creating cards if you are interested just tag 1 of the admins and they will add you as a card creater",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": true,
+      "action": "warn",
+      "warnLimit": 7,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363409465889823@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "Hello @user welcome to *@gname* have fun\n- use `.menu` fore my cmds\n- User `bal/balance/money` to see you wallet and bank\n- use `.mods` fore support\n- get you self to the top `lb`\n\nGet you self to the top @p",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363426137518216@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363425650517752@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363407144257665@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363426844095167@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363401694960774@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "@p @user",
+    "leaveEnabled": true,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363405518646449@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363405824912079@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363406781251592@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363424886923439@g.us": {
+    "welcomeEnabled": false,
+    "welcomeMessage": "👋 Welcome @user to @gname!",
+    "leaveEnabled": false,
+    "leaveMessage": "😢 @user left @gname",
+    "antilink": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363420478942725@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "hello @user to *@gname* don't forget to intro you self\n\nDo `.bal` to see you balance. do `.menu` to see my cmds do `.support/links` fore support",
+    "leaveEnabled": true,
+    "leaveMessage": "😢 @user left *@gname*",
+    "antilink": {
+      "enabled": true,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  },
+  "120363427003186265@g.us": {
+    "welcomeEnabled": true,
+    "welcomeMessage": "👋 Welcome @user to *@gname*!.use `.memu` to start the fun",
+    "leaveEnabled": true,
+    "leaveMessage": "😢 @user left *@gname*",
+    "antilink": {
+      "enabled": true,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    },
+    "antimention": {
+      "enabled": false,
+      "action": "warn",
+      "warnLimit": 3,
+      "warns": {}
+    }
+  }
+}
