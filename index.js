@@ -287,21 +287,10 @@ async function startBot() {
             m.message?.extendedTextMessage?.text ||
             '';
 
-          let prefix = PREFIX;
-          let isCmd = body.startsWith(PREFIX);
-
-          if (!isCmd && body.length > 0) {
-            // Check if the body matches any command name or alias without prefix
-            const possibleCmd = body.trim().split(/ +/)[0].toLowerCase();
-            if (commands.has(possibleCmd) || aliases.has(possibleCmd)) {
-              isCmd = true;
-              prefix = '';
-            }
-          }
-
+          const isCmd = body.startsWith(PREFIX);
           if (!isCmd) continue;
 
-          const args = body.slice(prefix.length).trim().split(/ +/);
+          const args = body.slice(PREFIX.length).trim().split(/ +/);
           const cmdName = args.shift()?.toLowerCase();
 
           const command = commands.get(cmdName) || aliases.get(cmdName);
