@@ -94,21 +94,27 @@ ${user.bio || 'No bio set'}
 moon({
   name: "setbc",
   category: "profile",
-  async execute(sock, jid, sender, args, m, { reply }) {
+  async execute(sock, jid, sender, args, m, { reply, findOrCreateWhatsApp, pushName }) {
     try {
-      const senderNumber = sender.split('@')[0];
       const url = args[0];
 
       if (!url || !url.startsWith('http')) {
         return reply("❌ Please provide a direct image URL to set your background.\nExample: .setbc https://example.com/image.jpg");
       }
 
-      await User.findOneAndUpdate({ whatsappNumber: senderNumber }, { backgroundImage: url }, { upsert: true });
+      // Get user using standard method
+      const user = await findOrCreateWhatsApp(sender, pushName);
+      if (!user) return reply("❌ User not found.");
+
+      // Update background image
+      user.backgroundImage = url;
+      await user.save();
+
       reply("✅ Your profile background has been updated!");
 
     } catch (err) {
       console.error("setbc error:", err);
-      reply("❌ Failed to set background.");
+      reply("❌ Failed to set background. Please try again.");
     }
   }
 });
