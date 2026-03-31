@@ -2,6 +2,7 @@ const Card = require('../../models/Card');
 const GroupSpawn = require('../../models/GroupSpawn');
 const config = require('../../config');
 const axios = require('axios');
+const { generateCardImage } = require('../../utils/cardGenerator');
 
 // ================= ID GENERATOR =================
 function generateId(length = 6) {
@@ -27,16 +28,11 @@ async function spawnCard(sock, jid) {
     if (!enabled) return;
 
     const randomId = Math.floor(Math.random() * 5000) + 1;
-
-    const res = await axios
-      .get(`https://api.jikan.moe/v4/characters/${randomId}/full`)
-      .catch(() => null);
-
+    const res = await axios.get(`https://api.jikan.moe/v4/characters/${randomId}/full`).catch(() => null);
     if (!res?.data?.data) return;
 
     const char = res.data.data;
-
-    const tiers = ["C", "B", "A", "S"];
+    const tiers = ["1", "2", "3", "4", "5", "6"];
     const tier = tiers[Math.floor(Math.random() * tiers.length)];
     const cardId = generateId();
 
@@ -47,8 +43,8 @@ async function spawnCard(sock, jid) {
       cardId,
       name: char.name,
       tier,
-      atk: Math.floor(Math.random() * 1000) + 500,
-      def: Math.floor(Math.random() * 1000) + 500,
+      atk: Math.floor(Math.random() * 5000) + 1000,
+      def: Math.floor(Math.random() * 5000) + 1000,
       level: 1,
       image: char.images?.jpg?.image_url,
       description: char.about || "No description available.",
@@ -57,14 +53,11 @@ async function spawnCard(sock, jid) {
       source: "spawn"
     });
 
+    const cardBuffer = await generateCardImage(newCard);
+
     await sock.sendMessage(jid, {
-      image: { url: newCard.image },
-      caption:
-        `🃏 *A NEW CARD HAS SPAWNED!* 🃏\n\n` +
-        `🆔 ID: ${cardId}\n` +
-        `🎈 Name: ${newCard.name}\n` +
-        `🎐 Tier: ${tier}\n\n` +
-        `Use *.claim ${cardId}* to collect it!`
+      image: cardBuffer,
+      caption: `🃏 *${config.BOT_NAME} SPAWN EVENT* 🃏\n\nUse *.claim ${cardId}* to collect it!`
     });
 
   } catch (err) {
