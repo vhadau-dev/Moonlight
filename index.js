@@ -81,7 +81,7 @@ async function startBot() {
         if (fs.existsSync('./restart_info.json')) {
           try {
             const restartData = JSON.parse(fs.readFileSync('./restart_info.json', 'utf8'));
-            await sock.sendMessage(restartData.jid, { text: "✅ *Restarting done!* The bot is back online and ready." }, { quoted: restartData.m });
+            await sock.sendMessage(restartData.jid, { text: `✅ *${BOT_NAME}* restarted done` }, { quoted: restartData.m });
             fs.unlinkSync('./restart_info.json');
           } catch (err) {
             console.error('Failed to send restart notification:', err);

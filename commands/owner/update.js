@@ -20,7 +20,7 @@ moon({
       }
 
       isUpdating = true;
-      reply("🔄 *Updating bot from GitHub...*\nFetching latest files from the Moonlight repository. Please wait.");
+      reply(`🔄 *Updating ${config.BOT_NAME}...* Please wait.`);
 
       const tempDir = path.join(__dirname, '../../.temp_update');
       const botDir = path.join(__dirname, '../../');
@@ -44,7 +44,7 @@ moon({
           return reply("❌ *Update failed!*\n\n" + error.message);
         }
         
-        reply("✅ *Update completed successfully!*\n\nAll files updated from the Moonlight repository (skipped config.js and sessions/).\n\nPlease use the *restart* command to apply the changes.");
+        reply(`✅ *${config.BOT_NAME}* update done. Use *restart* to apply changes.`);
       });
 
     } catch (err) {
