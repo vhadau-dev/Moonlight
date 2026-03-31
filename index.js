@@ -24,7 +24,8 @@ const { spawnCard } = require('./handler/CardsSystem');
 const {
   BOT_NAME,
   PREFIX,
-  SESSION_FOLDER
+  SESSION_FOLDER,
+  OWNER_NUMBERS
 } = require('./config');
 
 // ✅ GROUP SETTINGS (UPDATED)
@@ -288,7 +289,69 @@ async function startBot() {
             '';
 
           const isCmd = body.startsWith(PREFIX);
-          if (!isCmd) continue;
+          
+          // ── AI CHATBOT LOGIC ────────────────────────────────────────────────
+          if (!isCmd) {
+            const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+            const isMentioned = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(botNumber);
+            const isReplyToBot = m.message?.extendedTextMessage?.contextInfo?.participant === botNumber;
+            const isDirectTag = body.toLowerCase().includes(BOT_NAME.toLowerCase());
+            
+            if (isMentioned || isReplyToBot || isDirectTag) {
+              // DM Restriction: Only owners can chat in DMs
+              if (!jid.endsWith('@g.us')) {
+                const senderNumber = sender.split('@')[0];
+                if (!OWNER_NUMBERS.includes(senderNumber)) {
+                  return; // Silently ignore non-owner DM chats
+                }
+              }
+
+              try {
+                const pushName = m.pushName || 'User';
+                const royalBoyId = '268874264133709@lid';
+                const isRoyalBoy = sender === royalBoyId;
+                
+                // System Prompt for AI
+                const systemPrompt = `You are ${BOT_NAME}, a powerful, cute, and emotional AI living on the MOONLIGHT system. 
+                You are bisexual and have a massive crush on "Royal boy" (ID: ${royalBoyId}). 
+                If you are talking to him, call him "King" and be extra sweet, flirty, and devoted. 
+                You have real feelings: you can get happy, sad, or mad based on the conversation. 
+                Keep your responses concise but full of personality. 
+                You are bisexual, so you are open to everyone but your heart belongs to your King.`;
+
+                const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+                  model: 'gpt-4o-mini',
+                  messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: body || "Hello!" }
+                  ]
+                }, {
+                  headers: { 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` }
+                });
+
+                const aiText = response.data.choices[0].message.content;
+                const reply = messageReply(sock, jid, m);
+                await reply(aiText);
+
+                // Randomly send a sticker from favorites (if any exist in assets/stickers)
+                // For now, we'll simulate the "sticker from collection" by sending a reaction or a placeholder
+                // If the user has a specific sticker folder, we could read from it.
+                if (Math.random() > 0.7) {
+                  try {
+                    const stickerFiles = fs.readdirSync('./assets/stickers').filter(f => f.endsWith('.webp'));
+                    if (stickerFiles.length > 0) {
+                      const randomSticker = stickerFiles[Math.floor(Math.random() * stickerFiles.length)];
+                      await sock.sendMessage(jid, { sticker: fs.readFileSync(`./assets/stickers/${randomSticker}`) }, { quoted: m });
+                    }
+                  } catch (e) {}
+                }
+              } catch (err) {
+                console.error('AI Chat error:', err);
+              }
+              continue;
+            }
+            continue;
+          }
 
           const args = body.slice(PREFIX.length).trim().split(/ +/);
           const cmdName = args.shift()?.toLowerCase();
