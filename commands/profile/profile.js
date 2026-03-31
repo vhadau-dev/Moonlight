@@ -1,99 +1,74 @@
-const axios = require('axios');
-const sharp = require('sharp');
+const User = require('../../models/User');
 const config = require('../../config');
-
-const BG_URL = 'https://files.catbox.moe/wztao7.jpg';
-
-const normalizeJid = (jid) => jid.split('@')[0];
+const { generateProfileImage } = require('../../utils/profileGenerator');
+const moment = require('moment-timezone');
 
 moon({
-  name: 'profile',
-  category: 'profile',
-  aliases: ['p'],
-
-  async execute(sock, jid, sender, args, m, { reply, findOrCreateWhatsApp, pushName }) {
+  name: "profile",
+  category: "profile",
+  aliases: ["p"],
+  async execute(sock, jid, sender, args, m, { reply }) {
     try {
-
       const context = m.message?.extendedTextMessage?.contextInfo;
-
       let target = sender;
       if (context?.mentionedJid?.length) target = context.mentionedJid[0];
       else if (context?.participant) target = context.participant;
 
-      const user = await findOrCreateWhatsApp(target, pushName);
-      if (!user) return reply('❌ User not found.');
+      const targetNumber = target.split('@')[0];
 
-      const userId = normalizeJid(target);
-
-      // ---------------- ROLE ----------------
-      const isOwner = config.OWNER_NUMBERS?.includes(userId);
-      const isCreator = config.CARDS_CREATERS?.includes(userId);
-
-      let roleText = 'User';
-      if (isOwner && isCreator) roleText = 'Creator 👑';
-      else if (isOwner) roleText = 'Owner 👑';
-      else if (isCreator) roleText = 'Card Creator 🎴';
-
-      const cash = user.balance || 0;
-      const bank = user.bank || 0;
-      const total = cash + bank;
-
-      // ---------------- GET IMAGES ----------------
-      let pfpUrl;
-      try {
-        pfpUrl = await sock.profilePictureUrl(target, 'image');
-      } catch {
-        pfpUrl = 'https://files.catbox.moe/ydyexu.jpg';
+      let user = await User.findOne({ userId: targetNumber });
+      if (!user) {
+        user = await User.create({
+          userId: targetNumber,
+          username: 'Unknown',
+          balance: 1000,
+          bank: 0,
+          role: 'User'
+        });
       }
 
-      const bgBuffer = (await axios.get(BG_URL, { responseType: 'arraybuffer' })).data;
-      const pfpBuffer = (await axios.get(pfpUrl, { responseType: 'arraybuffer' })).data;
+      // Determine Role
+      let role = "Lord 👑";
+      if (config.OWNER_NUMBERS?.includes(targetNumber)) {
+        role = "Owner";
+      } else if (config.CARDS_CREATERS?.includes(targetNumber)) {
+        role = "Card Creator";
+      }
 
-      // ---------------- MAKE CIRCLE AVATAR ----------------
-      const avatarSize = 250;
+      // Fetch Profile Picture
+      let pfp;
+      try {
+        pfp = await sock.profilePictureUrl(target, 'image');
+      } catch (err) {
+        pfp = 'https://i.imgur.com/6VBx3io.png'; // Fallback
+      }
 
-      const circleAvatar = await sharp(pfpBuffer)
-        .resize(avatarSize, avatarSize)
-        .composite([{
-          input: Buffer.from(
-            `<svg width="${avatarSize}" height="${avatarSize}">
-              <circle cx="${avatarSize/2}" cy="${avatarSize/2}" r="${avatarSize/2}" fill="white"/>
-            </svg>`
-          ),
-          blend: 'dest-in'
-        }])
-        .png()
-        .toBuffer();
+      // Generate stylized profile image
+      const profileBuffer = await generateProfileImage({
+        username: user.username || 'N/A',
+        role: role,
+        pfp: pfp,
+        background: user.backgroundImage
+      });
 
-      // ---------------- COMPOSE FINAL IMAGE ----------------
-      const finalImage = await sharp(bgBuffer)
-        .resize(800, 500)
-        .composite([
-          {
-            input: circleAvatar,
-            top: 150, // 👈 move up/down
-            left: 275 // 👈 center (adjust if needed)
-          }
-        ])
-        .png()
-        .toBuffer();
+      const registeredDate = moment(user.createdAt).format('DD/MM/YYYY');
+      const bannedStatus = user.banned ? "Yes ❌" : "No ✅";
 
-      // ---------------- TEXT (UNCHANGED) ----------------
-      const text = `
+      const msg = `
 ╭━━━★彡 𝚳𝚯𝚯𝚴𝐋𝚰𝐆𝚮𝚻
  *Name*    : ${user.username || 'N/A'}
  *Age*      : ${user.age || 'N/A'}
 
 *⳹─❖────────❖─⳹*
- *Status*  : Active
- *Role*    : *${roleText}*
+ *Status*  : ${user.bio || 'Active'}
+ *Role*    : ${role}
 
- *Wallet*  : ${cash.toLocaleString()} mc
- *Bank*    : ${bank.toLocaleString()} mc
- *Total*   : ${total.toLocaleString()} mc
+ *Wallet*  : ${user.balance?.toLocaleString() || 0}
+ *Bank*    : ${user.bank?.toLocaleString() || 0}
+ *Total*   : ${( (user.balance || 0) + (user.bank || 0) ).toLocaleString()}
 
- *Registered* : Yes
- *Banned*     : ${user.banned ? 'Yes' : 'No'}
+ *Registered* : ${registeredDate}
+ *Banned*     : ${bannedStatus}
 
 *⳹─❖────────❖─⳹*
         *ꕥ     Bio      ꕥ*
@@ -103,16 +78,41 @@ ${user.bio || 'No bio set'}
 🌙 Moonlight Haven
       `.trim();
 
-      // ---------------- SEND ----------------
-      await sock.sendMessage(jid, {
-        image: finalImage,
-        caption: text,
-        mentions: [target]
-      }, { quoted: m });
+      return sock.sendMessage(
+        jid,
+        { 
+          image: profileBuffer, 
+          caption: msg,
+          mentions: [target]
+        },
+        { quoted: m }
+      );
 
     } catch (err) {
       console.error("profile error:", err);
-      return reply('❌ Failed to generate profile.');
+      reply("❌ An error occurred while fetching the profile.");
+    }
+  }
+});
+
+moon({
+  name: "setbc",
+  category: "profile",
+  async execute(sock, jid, sender, args, m, { reply }) {
+    try {
+      const senderNumber = sender.split('@')[0];
+      const url = args[0];
+
+      if (!url || !url.startsWith('http')) {
+        return reply("❌ Please provide a direct image URL to set your background.\nExample: .setbc https://example.com/image.jpg");
+      }
+
+      await User.findOneAndUpdate({ userId: senderNumber }, { backgroundImage: url }, { upsert: true });
+      reply("✅ Your profile background has been updated!");
+
+    } catch (err) {
+      console.error("setbc error:", err);
+      reply("❌ Failed to set background.");
     }
   }
 });
