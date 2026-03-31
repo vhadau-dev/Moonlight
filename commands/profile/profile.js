@@ -7,7 +7,7 @@ moon({
   name: "profile",
   category: "profile",
   aliases: ["p"],
-  async execute(sock, jid, sender, args, m, { reply }) {
+  async execute(sock, jid, sender, args, m, { reply, findOrCreateWhatsApp, pushName }) {
     try {
       const context = m.message?.extendedTextMessage?.contextInfo;
       let target = sender;
@@ -16,16 +16,9 @@ moon({
 
       const targetNumber = target.split('@')[0];
 
-      let user = await User.findOne({ userId: targetNumber });
-      if (!user) {
-        user = await User.create({
-          userId: targetNumber,
-          username: 'Unknown',
-          balance: 1000,
-          bank: 0,
-          role: 'User'
-        });
-      }
+      // Use the bot's standard findOrCreateWhatsApp to ensure data consistency
+      const user = await findOrCreateWhatsApp(target, pushName);
+      if (!user) return reply('❌ User not found.');
 
       // Determine Role
       let role = "Lord 👑";
@@ -45,7 +38,7 @@ moon({
 
       // Generate stylized profile image
       const profileBuffer = await generateProfileImage({
-        username: user.username || 'N/A',
+        username: user.username || pushName || 'N/A',
         role: role,
         pfp: pfp,
         background: user.backgroundImage
@@ -53,19 +46,22 @@ moon({
 
       const registeredDate = moment(user.createdAt).format('DD/MM/YYYY');
       const bannedStatus = user.banned ? "Yes ❌" : "No ✅";
+      const wallet = user.balance || 0;
+      const bank = user.bank || 0;
+      const total = wallet + bank;
 
       const msg = `
 ╭━━━★彡 𝚳𝚯𝚯𝚴𝐋𝚰𝐆𝚮𝚻
- *Name*    : ${user.username || 'N/A'}
+ *Name*    : ${user.username || pushName || 'N/A'}
  *Age*      : ${user.age || 'N/A'}
 
 *⳹─❖────────❖─⳹*
  *Status*  : ${user.bio || 'Active'}
  *Role*    : ${role}
 
- *Wallet*  : ${user.balance?.toLocaleString() || 0}
- *Bank*    : ${user.bank?.toLocaleString() || 0}
- *Total*   : ${( (user.balance || 0) + (user.bank || 0) ).toLocaleString()}
+ *Wallet*  : ${wallet.toLocaleString()}
+ *Bank*    : ${bank.toLocaleString()}
+ *Total*   : ${total.toLocaleString()}
 
  *Registered* : ${registeredDate}
  *Banned*     : ${bannedStatus}
@@ -107,7 +103,7 @@ moon({
         return reply("❌ Please provide a direct image URL to set your background.\nExample: .setbc https://example.com/image.jpg");
       }
 
-      await User.findOneAndUpdate({ userId: senderNumber }, { backgroundImage: url }, { upsert: true });
+      await User.findOneAndUpdate({ whatsappNumber: senderNumber }, { backgroundImage: url }, { upsert: true });
       reply("✅ Your profile background has been updated!");
 
     } catch (err) {
