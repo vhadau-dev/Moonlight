@@ -26,14 +26,16 @@ moon({
       const tempDir = path.join(__dirname, '../../.temp_update');
       const botDir = path.join(__dirname, '../../');
       
-      // We pull the URL from the local git config to keep it private
+      // Explicitly using your GitHub URL to ensure it works on any panel
+      const repoUrl = "https://github.com/vhadau-dev/Moonlight.git";
+      
       const cmd = `
         rm -rf "${tempDir}" &&
-        git clone "$(git config --get remote.origin.url)" "${tempDir}" &&
+        git clone "${repoUrl}" "${tempDir}" &&
         cd "${tempDir}" &&
         rm -f config.js &&
         rm -rf sessions/ &&
-        cp -R * "${botDir}" &&
+        cp -R ./* "${botDir}" &&
         cd "${botDir}" &&
         rm -rf "${tempDir}"
       `;
@@ -42,7 +44,7 @@ moon({
         isUpdating = false;
         if (error) {
           console.error("Update error:", error);
-          return reply("❌ *Update failed!*");
+          return reply(`❌ *Update failed!*\n\nError: ${error.message}`);
         }
         
         reply(`✅ *${config.BOT_NAME}* update done. Use *restart* to apply changes.`);
