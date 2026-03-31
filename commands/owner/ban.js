@@ -15,7 +15,7 @@ moon({
       const senderNumber = sender.split('@')[0];
 
       if (!ownerNumbers.includes(senderNumber)) {
-        return reply('❌ Only owner can use this command.');
+        return reply('⛔ You don't have permission for that.');
       }
 
       const sub = (args[0] || '').toLowerCase();

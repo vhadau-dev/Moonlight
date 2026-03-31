@@ -17,13 +17,17 @@ moon({
       let bet;
 
       if (args[0].toLowerCase() === 'all') {
-        bet = user.balance;
+        bet = Math.min(user.balance, 25000);
         if (bet <= 0) return reply('💸 You have no coins to gamble!');
       } else {
         bet = parseInt(args[0]);
       }
 
       if (!bet || bet <= 0) {
+
+      if (bet > 25000) {
+        return reply(`❌ Maximum bet is *25,000 coins*. You can't bet more than that!`);
+      }
         return reply('❌ Invalid bet amount.');
       }
 
@@ -41,7 +45,7 @@ moon({
         multiplier = multipliers[Math.floor(Math.random() * multipliers.length)];
       }
 
-      const MAX_WIN = 500000;
+      const MAX_WIN = 35000;
 
       let payout = 0;
 

@@ -14,7 +14,7 @@ moon({
 
       // 🔒 OWNER CHECK
       if (!config.OWNER_NUMBERS.includes(senderNumber)) {
-        return reply("❌ You are not allowed to use this command.");
+        return reply("⛔ You don't have permission for that.");
       }
 
       // ⚠️ CONFIRMATION SAFETY

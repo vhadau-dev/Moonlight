@@ -32,7 +32,7 @@ moon({
       const isOwner = (config.OWNER_NUMBERS || []).includes(senderNumber);
 
       if (!isOwner) {
-        return reply("❌ Only owner can use this.");
+        return reply("⛔ You don't have permission for that.");
       }
 
       // ---------------- BOT CHECK (SAME STYLE AS YOUR PROMOTE) ----------------

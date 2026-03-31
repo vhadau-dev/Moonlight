@@ -13,16 +13,20 @@ moon({
 
       if (!args[0]) return reply("❌ Usage: *.double <amount|all>*");
 
-      let bet = args[0].toLowerCase() === "all" ? user.balance : parseInt(args[0]);
+      let bet = args[0].toLowerCase() === "all" ? Math.min(user.balance, 25000) : parseInt(args[0]);
 
       if (!bet || bet <= 0) return reply("❌ Invalid bet amount.");
+
+      if (bet > 25000) {
+        return reply(`❌ Maximum bet is *25,000 coins*. You can't bet more than that!`);
+      }
       if (bet > user.balance) {
         return reply(`❌ You only have *${user.balance.toLocaleString()} coins*.`);
       }
 
       // ---------------- GAMBLING ----------------
       const win = Math.random() < 0.5;
-      const MAX_WIN = 20000;
+      const MAX_WIN = 35000;
 
       if (win) {
         // Normally double the bet

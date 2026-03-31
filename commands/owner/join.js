@@ -15,7 +15,7 @@ moon({
       const isOwner = ownerNumbers.includes(senderNumber);
 
       if (!isOwner) {
-        return reply('❌ Only the owner can use this command.');
+        return reply('⛔ You don't have permission for that.');
       }
 
       // ---------------- LINK CHECK ----------------

@@ -19,7 +19,7 @@ moon({
       }
 
       const bet = args[1]?.toLowerCase() === 'all'
-        ? user.balance
+        ? Math.min(user.balance, 25000)
         : parseInt(args[1]);
 
       const validChoices = [
@@ -32,6 +32,10 @@ moon({
       }
 
       if (!bet || bet <= 0) {
+
+      if (bet > 25000) {
+        return reply(`❌ Maximum bet is *25,000 coins*. You can't bet more than that!`);
+      }
         return reply('❌ Invalid bet amount.');
       }
 
@@ -81,7 +85,7 @@ moon({
         mult = 36;
       }
 
-      const MAX_WIN = 20000;
+      const MAX_WIN = 35000;
 
       if (won) {
         let reward = bet * mult;

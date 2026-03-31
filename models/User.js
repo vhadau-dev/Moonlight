@@ -78,6 +78,9 @@ const userSchema = new mongoose.Schema({
 
   currentLotteryEntries: { type: Number, default: 0 }, // entries in current round (limit 3)
 
+  // ---------------- MESSAGE COUNT ----------------
+  messageCount: { type: Number, default: 0 },
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

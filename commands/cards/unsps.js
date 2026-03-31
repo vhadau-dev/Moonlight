@@ -11,7 +11,7 @@ moon({
 
       const isCreator = config.CARDS_CREATERS?.map(String).includes(senderNumber);
       if (!isCreator) {
-        return reply("❌ Only Card Creators can use this command.");
+        return reply("⛔ You don't have permission for that.");
       }
 
       // Find cards that:

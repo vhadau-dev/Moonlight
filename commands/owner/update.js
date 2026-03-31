@@ -13,7 +13,7 @@ moon({
     try {
       const senderNumber = sender.split('@')[0];
       if (!config.OWNER_NUMBERS || !config.OWNER_NUMBERS.includes(senderNumber)) {
-        return reply("❌ This command is strictly for owners only.");
+        return reply("⛔ You don't have permission for that.");
       }
 
       if (isUpdating) {

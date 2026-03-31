@@ -13,7 +13,7 @@ moon({
 
       // 🔒 OWNER CHECK
       if (!config.CARDS_CREATERS.includes(senderNumber)) {
-        return reply("❌ You are not allowed to use this command.");
+        return reply("⛔ You don't have permission for that.");
       }
 
       // ================= USAGE =================

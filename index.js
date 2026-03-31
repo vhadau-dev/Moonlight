@@ -28,7 +28,7 @@ const {
 } = require('./config');
 
 // ✅ GROUP SETTINGS (UPDATED)
-const { getGroup, handleGroupEvents } = require('./models/GroupSettings');
+const { getGroup, handleGroupEvents, getAntilink, getAntimention, updateAntilink, updateAntimention } = require('./models/GroupSettings');
 
 const {
   messageReply,
@@ -159,6 +159,128 @@ async function startBot() {
 
           const jid = m.key.remoteJid;
           const sender = m.key.participant || jid;
+
+          // ---------------- COUNT ALL MESSAGES ----------------
+          try {
+            const pushNameForCount = m.pushName || 'User';
+            const userForCount = await findOrCreateWhatsApp(sender, pushNameForCount);
+            userForCount.messageCount = (userForCount.messageCount || 0) + 1;
+            await userForCount.save();
+          } catch (_) {}
+
+          // ---------------- ANTILINK / ANTIMENTION ENFORCEMENT ----------------
+          if (jid.endsWith('@g.us')) {
+            try {
+              const msgBody =
+                m.message?.conversation ||
+                m.message?.extendedTextMessage?.text ||
+                m.message?.imageMessage?.caption ||
+                m.message?.videoMessage?.caption || '';
+
+              // Check if sender is admin (admins are exempt)
+              let senderIsAdmin = false;
+              try {
+                const grpMeta = await sock.groupMetadata(jid);
+                const part = grpMeta.participants.find(p => p.id === sender);
+                senderIsAdmin = part && (part.admin === 'admin' || part.admin === 'superadmin');
+              } catch {}
+
+              if (!senderIsAdmin) {
+                // ── ANTILINK ─────────────────────────────────────────────────
+                const alSettings = getAntilink(jid);
+                if (alSettings?.enabled) {
+                  const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|chat\.whatsapp\.com\/[^\s]+)/i;
+                  if (urlRegex.test(msgBody)) {
+                    const action = alSettings.action || 'warn';
+                    if (action === 'delete') {
+                      try { await sock.sendMessage(jid, { delete: m.key }); } catch {}
+                      await sock.sendMessage(jid, {
+                        text: `🔗 @${sender.split('@')[0]} links are not allowed here!`,
+                        mentions: [sender]
+                      });
+                    } else if (action === 'kick') {
+                      try { await sock.sendMessage(jid, { delete: m.key }); } catch {}
+                      await sock.sendMessage(jid, {
+                        text: `🚫 @${sender.split('@')[0]} was removed for sending a link.`,
+                        mentions: [sender]
+                      });
+                      try { await sock.groupParticipantsUpdate(jid, [sender], 'remove'); } catch {}
+                    } else {
+                      // warn
+                      const warns = alSettings.warns || {};
+                      warns[sender] = (warns[sender] || 0) + 1;
+                      const warnLimit = alSettings.warnLimit || 3;
+                      updateAntilink(jid, { warns });
+                      try { await sock.sendMessage(jid, { delete: m.key }); } catch {}
+                      if (warns[sender] >= warnLimit) {
+                        await sock.sendMessage(jid, {
+                          text: `🚫 @${sender.split('@')[0]} reached the warn limit and was removed.`,
+                          mentions: [sender]
+                        });
+                        try { await sock.groupParticipantsUpdate(jid, [sender], 'remove'); } catch {}
+                        warns[sender] = 0;
+                        updateAntilink(jid, { warns });
+                      } else {
+                        await sock.sendMessage(jid, {
+                          text: `⚠️ @${sender.split('@')[0]} links are not allowed! Warning ${warns[sender]}/${warnLimit}.`,
+                          mentions: [sender]
+                        });
+                      }
+                    }
+                    continue; // skip command processing for this message
+                  }
+                }
+
+                // ── ANTIMENTION ───────────────────────────────────────────────
+                const amSettings = getAntimention(jid);
+                if (amSettings?.enabled) {
+                  const mentionedJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
+                  const hasMention = mentionedJids.length > 0;
+                  if (hasMention) {
+                    const action = amSettings.action || 'warn';
+                    if (action === 'delete') {
+                      try { await sock.sendMessage(jid, { delete: m.key }); } catch {}
+                      await sock.sendMessage(jid, {
+                        text: `🔔 @${sender.split('@')[0]} mentioning members is not allowed here!`,
+                        mentions: [sender]
+                      });
+                    } else if (action === 'kick') {
+                      try { await sock.sendMessage(jid, { delete: m.key }); } catch {}
+                      await sock.sendMessage(jid, {
+                        text: `🚫 @${sender.split('@')[0]} was removed for mentioning members.`,
+                        mentions: [sender]
+                      });
+                      try { await sock.groupParticipantsUpdate(jid, [sender], 'remove'); } catch {}
+                    } else {
+                      // warn
+                      const warns = amSettings.warns || {};
+                      warns[sender] = (warns[sender] || 0) + 1;
+                      const warnLimit = amSettings.warnLimit || 3;
+                      updateAntimention(jid, { warns });
+                      try { await sock.sendMessage(jid, { delete: m.key }); } catch {}
+                      if (warns[sender] >= warnLimit) {
+                        await sock.sendMessage(jid, {
+                          text: `🚫 @${sender.split('@')[0]} reached the warn limit and was removed.`,
+                          mentions: [sender]
+                        });
+                        try { await sock.groupParticipantsUpdate(jid, [sender], 'remove'); } catch {}
+                        warns[sender] = 0;
+                        updateAntimention(jid, { warns });
+                      } else {
+                        await sock.sendMessage(jid, {
+                          text: `⚠️ @${sender.split('@')[0]} mentioning is not allowed! Warning ${warns[sender]}/${warnLimit}.`,
+                          mentions: [sender]
+                        });
+                      }
+                    }
+                    continue; // skip command processing for this message
+                  }
+                }
+              }
+            } catch (enfErr) {
+              console.error('Enforcement error:', enfErr);
+            }
+          }
 
           const body =
             m.message?.conversation ||
