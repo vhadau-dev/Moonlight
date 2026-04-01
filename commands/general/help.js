@@ -1,14 +1,17 @@
 const config = require('../../config');
 
-const ReadMore = String.fromCharCode(8206).repeat(4001);
+// Keep this reasonable
+const ReadMore = String.fromCharCode(8206).repeat(1000);
 
-// Normalize JID → number
-const normalizeJid = (jid) => jid.split('@')[0];
+// Format category names
+const formatCategory = (cat) => {
+  return cat.charAt(0) + cat.slice(1).toLowerCase();
+};
 
 moon({
   name: 'menu',
   category: 'general',
-  aliases: ['help', 'mn'],
+  aliases: ['help'],
   description: 'Displays commands',
 
   async execute(sock, jid, sender, args, m, { reply, commands }) {
@@ -18,67 +21,18 @@ moon({
         return reply('❌ Command system error.');
       }
 
-      const senderNumber = normalizeJid(sender);
-      const isOwner = config.OWNER_NUMBERS?.includes(senderNumber);
-      const invoked = m.command;
-
-      // =========================
-      // 🔐 OWNER MENU (.mn)
-      // =========================
-      if (invoked === 'mn') {
-
-        if (!isOwner) return;
-
-        const grouped = {};
-
-        for (const cmd of commands.values()) {
-          if (!cmd || !cmd.name) continue;
-
-          const cat = (cmd.category || 'NO_CATEGORY').toUpperCase();
-
-          if (cat !== 'OWNER' && cat !== 'NO_CATEGORY') continue;
-
-          if (!grouped[cat]) grouped[cat] = [];
-
-          if (!grouped[cat].includes(cmd.name)) {
-            grouped[cat].push(cmd.name);
-          }
-        }
-
-        let text = `
-╭━━━★ 𝚳𝚯𝚯𝚴𝐋𝚰𝐆𝚮𝚻
-│ꕥ Creater : ${config.OWNER_NAME}
-│ꕥ Name : ${config.BOT_NAME}
-│ꕥ Prefix : ${config.PREFIX}
-└┬────────❖
-${ReadMore}
-`.trim();
-
-        for (const cat of Object.keys(grouped).sort()) {
-          text += `\n\n──[ *${cat}*\n`;
-
-          grouped[cat]
-            .sort()
-            .forEach(c => {
-              text += `> │ ${config.PREFIX}${c}\n`;
-            });
-        }
-
-        return reply(text);
-      }
-
-      // =========================
-      // 📜 NORMAL MENU (.menu)
-      // =========================
-
       const grouped = {};
 
       for (const cmd of commands.values()) {
-        if (!cmd || !cmd.name) continue;
+        if (!cmd?.name) continue;
 
-        const cat = (cmd.category || 'NO_CATEGORY').toUpperCase();
+        // ❌ Skip commands with no category
+        if (!cmd.category) continue;
 
-        if (cat === 'OWNER') continue;
+        const cat = cmd.category.toUpperCase();
+
+        // ❌ Hide OWNER + useless categories
+        if (cat === 'OWNER' || cat === 'NO_CATEGORY') continue;
 
         if (!grouped[cat]) grouped[cat] = [];
 
@@ -88,22 +42,21 @@ ${ReadMore}
       }
 
       let text = `
-╭━━━★ 𝚳𝚯𝚯𝚴𝐋𝚰𝐆𝚮𝚻
-│ꕥ Creater : ${config.OWNER_NAME}
-│ꕥ Name : ${config.BOT_NAME}
+╭━━━★ MOONLIGHT
+│ꕥ Creator: ${config.OWNER_NAME}
+│ꕥ Name   : ${config.BOT_NAME}
 │ꕥ Prefix : ${config.PREFIX}
-└┬────────❖
-${ReadMore}
-`.trim();
+╰─────────────❖
+${ReadMore}`.trim();
 
       for (const cat of Object.keys(grouped).sort()) {
-        text += `\n\n──[ *${cat}*\n`;
+        text += `\n\n*──[${formatCategory(cat)}*\n`;
 
-        grouped[cat]
+        // ✅ ONLY ONE ">" here
+        text += '> ' + grouped[cat]
           .sort()
-          .forEach(c => {
-            text += `> │ ${config.PREFIX}${c}\n`;
-          });
+          .map(c => `・${c}`)
+          .join('  ');
       }
 
       if (config.MENU_IMAGE) {
@@ -120,4 +73,4 @@ ${ReadMore}
       return reply('❌ Failed to generate menu.');
     }
   }
-});
+}); 
