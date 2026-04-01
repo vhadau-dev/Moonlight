@@ -21,7 +21,7 @@ moon({
       if (!user) return reply('❌ User not found.');
 
       // Determine Role
-      let role = "Member";
+      let role = "citizen";
       if (config.OWNER_NUMBERS?.includes(targetNumber)) {
         role = "Owner 👑";
       } else if (config.CARDS_CREATERS?.includes(targetNumber)) {
@@ -139,6 +139,18 @@ moon({
       }
 
       const user = await findOrCreateWhatsApp(sender, pushName);
+      if (!user) return reply("❌ User not found.");
+
+      user.profileImage = url;
+      await user.save();
+
+      reply("✅ Your profile picture has been updated!");
+    } catch (err) {
+      console.error("setp error:", err);
+      reply("❌ Failed to set profile image. Please try again.");
+    }
+  }
+});
       if (!user) return reply("❌ User not found.");
 
       user.profileImage = url;
