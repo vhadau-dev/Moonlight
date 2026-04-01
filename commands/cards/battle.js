@@ -19,15 +19,15 @@ moon({
         });
       }
 
-      // Get mentioned user
-      const mentionedJid =
-        m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+      // Get target user (mention or reply)
+      const contextInfo = m.message?.extendedTextMessage?.contextInfo;
+      const targetJid = contextInfo?.mentionedJid?.[0] || contextInfo?.participant;
 
-      if (!mentionedJid) {
-        return reply("❌ Tag someone to battle.");
+      if (!targetJid) {
+        return reply("❌ Tag or reply to someone to battle.");
       }
 
-      const opponentNumber = mentionedJid.split('@')[0];
+      const opponentNumber = targetJid.split('@')[0];
 
       // Fetch equipped cards
       const myCard = await Card.findOne({

@@ -12,14 +12,15 @@ moon({
     try {
 
       const contextInfo = message.message?.extendedTextMessage?.contextInfo;
-      const mentioned = contextInfo?.mentionedJid;
-      const target = mentioned?.[0];
+      const target = contextInfo?.mentionedJid?.[0] || contextInfo?.participant;
 
       if (!target) {
-        return reply("❌ Mention someone to pay.\nExample: *.pay @user 500*");
+        return reply("❌ Mention or reply to someone to pay.\nExample: *.pay @user 500*");
       }
 
-      const amount = parseInt(args[1] || args[0]);
+      // If replying, amount is in args[0]. If mentioning, amount is in args[1].
+      const isReply = contextInfo?.participant && !contextInfo?.mentionedJid?.[0];
+      const amount = parseInt(isReply ? args[0] : (args[1] || args[0]));
 
       if (!amount || amount <= 0) {
         return reply("❌ Enter a valid amount of coins.");

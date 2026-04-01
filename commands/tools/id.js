@@ -6,12 +6,8 @@ moon({
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
 
-      let target = sender;
-
-      // If user mentioned someone
-      if (m.mentionedJid && m.mentionedJid.length > 0) {
-        target = m.mentionedJid[0];
-      }
+      const contextInfo = m.message?.extendedTextMessage?.contextInfo;
+      let target = contextInfo?.mentionedJid?.[0] || contextInfo?.participant || sender;
 
       const userId = target;
       const groupId = jid.endsWith("@g.us") ? jid : "❌ Not in group";

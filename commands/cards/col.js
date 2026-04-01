@@ -3,8 +3,10 @@ const User = require('../../models/User');
 
 moon({
   name: "col",
+  aliases: ["search", "inv", "inventory"],
   category: "cards",
   description: "View and manage your card collection.",
+  cooldown: 5,
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
       const senderNumber = sender.split('@')[0];

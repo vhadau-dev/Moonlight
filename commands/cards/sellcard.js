@@ -4,7 +4,9 @@ const config = require('../../config');
 
 moon({
   name: "sellcard",
+  aliases: ["sell"],
   category: "cards",
+  cooldown: 5,
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
       const senderNumber = sender.split('@')[0];

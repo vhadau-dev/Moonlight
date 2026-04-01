@@ -7,10 +7,10 @@ moon({
 
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
-      const mentioned = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-      const target = mentioned?.[0];
+      const contextInfo = m.message?.extendedTextMessage?.contextInfo;
+      const target = contextInfo?.mentionedJid?.[0] || contextInfo?.participant;
 
-      if (!target) return reply("❌ Mention a user.");
+      if (!target) return reply("❌ Mention or reply to a user.");
 
       const metadata = await sock.groupMetadata(jid);
 

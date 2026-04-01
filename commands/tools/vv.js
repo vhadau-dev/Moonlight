@@ -5,6 +5,7 @@ moon({
   category: 'tools',
   description: 'Reveal a view-once image, video, or voice note (group admins only)',
   usage: '.vv (reply to a view-once message)',
+  cooldown: 5,
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
       // ── 1. Group-only + admin-only check ─────────────────────────────────
@@ -26,7 +27,9 @@ moon({
       }
 
       // ── 2. Must be a reply ────────────────────────────────────────────────
-      const contextInfo = m.message?.extendedTextMessage?.contextInfo || m.message?.imageMessage?.contextInfo || m.message?.videoMessage?.contextInfo;
+      const contextInfo = m.message?.extendedTextMessage?.contextInfo || 
+                          m.message?.imageMessage?.contextInfo || 
+                          m.message?.videoMessage?.contextInfo;
       const quotedMsg   = contextInfo?.quotedMessage;
 
       if (!quotedMsg) {
@@ -34,7 +37,6 @@ moon({
       }
 
       // ── 3. Find the view-once content ─────────────────────────────────────
-      // Baileys sometimes nests the view-once message differently
       let viewOnce =
         quotedMsg.viewOnceMessage?.message ||
         quotedMsg.viewOnceMessageV2?.message ||
@@ -42,7 +44,6 @@ moon({
         null;
 
       // If not found in standard wrappers, check if the quoted message itself is the media
-      // but has the viewOnce property set to true inside the media message
       if (!viewOnce) {
         if (quotedMsg.imageMessage?.viewOnce) viewOnce = quotedMsg;
         else if (quotedMsg.videoMessage?.viewOnce) viewOnce = quotedMsg;
@@ -78,6 +79,10 @@ moon({
         }
       );
 
+      if (!buffer) {
+        return reply('❌ Failed to download media. It might have already been opened or expired.');
+      }
+
       // ── 5. Re-send as normal media ────────────────────────────────────────
       if (viewOnce.imageMessage) {
         await sock.sendMessage(jid, {
@@ -99,7 +104,7 @@ moon({
 
     } catch (err) {
       console.error('vv command error:', err);
-      reply('❌ Failed to reveal the view-once message. It might have already been opened or expired.');
+      reply('❌ Failed to reveal the view-once message.');
     }
   }
 });

@@ -17,7 +17,7 @@ moon({
       const isOwner = ownerNumbers.includes(senderNumber);
 
       if (!isOwner) {
-        return reply('⛔ You don't have permission for that.');
+        return reply("⛔ You don't have permission for that.");
       }
 
       // ---------------- SETTINGS ----------------

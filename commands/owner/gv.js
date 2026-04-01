@@ -15,7 +15,7 @@ moon({
       const senderNumber = sender.split('@')[0];
 
       if (!ownerNumbers.includes(senderNumber)) {
-        return reply('⛔ You don't have permission for that.');
+        return reply("⛔ You don't have permission for that.");
       }
 
       // ---------------- TARGET ----------------

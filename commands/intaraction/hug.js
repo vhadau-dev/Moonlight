@@ -1,10 +1,12 @@
-const axios = require("axios");
-
 moon({
   name: "hug",
   category: "interaction",
+  cooldown: 5,
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
+      // ✅ LAZY LOAD AXIOS
+      const axios = require("axios");
+
       const mentionedJid = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (m.message?.extendedTextMessage?.contextInfo?.participant) || null;
       
       if (!mentionedJid) {

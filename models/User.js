@@ -58,7 +58,8 @@ const userSchema = new mongoose.Schema({
     health: { type: Number, default: 100 },
     happiness: { type: Number, default: 100 },
     lastHunt: { type: Date, default: null },
-    lastTrain: { type: Date, default: null }
+    lastTrain: { type: Date, default: null },
+    lastInteraction: { type: Date, default: null }
   },
 
   // ---------------- COOLDOWNS ----------------

@@ -15,16 +15,17 @@ moon({
       const senderNumber = sender.split('@')[0];
 
       if (!ownerNumbers.includes(senderNumber)) {
-        return reply('⛔ You don't have permission for that.');
+        return reply("⛔ You don't have permission for that.");
       }
 
       const sub = (args[0] || '').toLowerCase();
 
       // ---------------- GET TARGET FUNCTION ----------------
       const getTarget = () => {
-        const mentioned = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+        const contextInfo = m.message?.extendedTextMessage?.contextInfo;
+        const target = contextInfo?.mentionedJid?.[0] || contextInfo?.participant;
 
-        if (mentioned) return mentioned;
+        if (target) return target;
 
         if (args[0] && args[0].match(/^\d+$/)) {
           return args[0] + '@s.whatsapp.net';

@@ -286,6 +286,8 @@ async function startBot() {
           const body =
             m.message?.conversation ||
             m.message?.extendedTextMessage?.text ||
+            m.message?.imageMessage?.caption ||
+            m.message?.videoMessage?.caption ||
             '';
 
           const isCmd = body.startsWith(PREFIX);
@@ -293,9 +295,13 @@ async function startBot() {
           // ── AI CHATBOT LOGIC ────────────────────────────────────────────────
           if (!isCmd) {
             const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
-            const isMentioned = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(botNumber);
-            const isReplyToBot = m.message?.extendedTextMessage?.contextInfo?.participant === botNumber;
-            const isDirectTag = body.toLowerCase().includes(BOT_NAME.toLowerCase());
+            const contextInfo = m.message?.extendedTextMessage?.contextInfo || 
+                                m.message?.imageMessage?.contextInfo || 
+                                m.message?.videoMessage?.contextInfo;
+            
+            const isMentioned = contextInfo?.mentionedJid?.includes(botNumber);
+            const isReplyToBot = contextInfo?.participant === botNumber;
+            const isDirectTag = BOT_NAME && BOT_NAME !== '-' && body.toLowerCase().includes(BOT_NAME.toLowerCase());
             
             if (isMentioned || isReplyToBot || isDirectTag) {
               // DM Restriction: Only owners can chat in DMs
@@ -334,8 +340,6 @@ async function startBot() {
                 await reply(aiText);
 
                 // Randomly send a sticker from favorites (if any exist in assets/stickers)
-                // For now, we'll simulate the "sticker from collection" by sending a reaction or a placeholder
-                // If the user has a specific sticker folder, we could read from it.
                 if (Math.random() > 0.7) {
                   try {
                     const stickerFiles = fs.readdirSync('./assets/stickers').filter(f => f.endsWith('.webp'));

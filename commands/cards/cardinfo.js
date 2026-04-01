@@ -6,7 +6,8 @@ const { generateCardImage } = require('../../utils/cardGenerator');
 moon({
   name: "cardinfo",
   category: "cards",
-  aliases: ["ci"],
+  aliases: ["ci", "detail"],
+  cooldown: 5,
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
       const cardId = args[0]?.toUpperCase();

@@ -1,12 +1,12 @@
-const axios = require("axios");
-
 moon({
   name: "weather",
   category: "tools",
   description: "Get weather of a city",
+  cooldown: 5,
 
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
+      const axios = require("axios");
 
       if (!args.length) {
         return reply("❌ Example: .weather Johannesburg");

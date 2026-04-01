@@ -13,8 +13,8 @@ moon({
       }
 
       // ---------------- TARGET ----------------
-      const mentioned = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-      let target = mentioned?.[0];
+      const contextInfo = m.message?.extendedTextMessage?.contextInfo;
+      let target = contextInfo?.mentionedJid?.[0] || contextInfo?.participant;
 
       // allow number input (same flow, just extended)
       if (!target && args[0]) {

@@ -4,6 +4,11 @@ const path = require('path');
 // ---------------- PATH ----------------
 const filePath = path.join(__dirname, '../database/group.json');
 
+// ---------------- CACHE ----------------
+let groupCache = null;
+let lastLoadTime = 0;
+const CACHE_TTL = 30000; // 30 seconds
+
 // ---------------- ENSURE FILE EXISTS ----------------
 function ensureFile() {
   if (!fs.existsSync(filePath)) {
@@ -13,12 +18,29 @@ function ensureFile() {
 
 // ---------------- LOAD DATA ----------------
 function loadData() {
+  const now = Date.now();
+  
+  // ✅ Return cache if valid
+  if (groupCache && (now - lastLoadTime < CACHE_TTL)) {
+    return groupCache;
+  }
+
   ensureFile();
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    groupCache = data;
+    lastLoadTime = now;
+    return data;
+  } catch (err) {
+    console.error("Error loading group data:", err);
+    return groupCache || {};
+  }
 }
 
 // ---------------- SAVE DATA ----------------
 function saveData(data) {
+  groupCache = data;
+  lastLoadTime = Date.now();
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
@@ -54,23 +76,34 @@ function defaultGroup() {
 // ---------------- GET GROUP ----------------
 function getGroup(groupId) {
   const data = loadData();
+  let changed = false;
 
   if (!data[groupId]) {
     data[groupId] = defaultGroup();
-    saveData(data);
+    changed = true;
   } else {
     const defaults = defaultGroup();
 
-    if (!data[groupId].antilink) data[groupId].antilink = defaults.antilink;
-    if (!data[groupId].antimention) data[groupId].antimention = defaults.antimention;
+    if (!data[groupId].antilink) {
+      data[groupId].antilink = defaults.antilink;
+      changed = true;
+    }
+    if (!data[groupId].antimention) {
+      data[groupId].antimention = defaults.antimention;
+      changed = true;
+    }
 
     if (typeof data[groupId].welcomeEnabled === 'undefined') {
       data[groupId].welcomeEnabled = defaults.welcomeEnabled;
+      changed = true;
     }
     if (typeof data[groupId].leaveEnabled === 'undefined') {
       data[groupId].leaveEnabled = defaults.leaveEnabled;
+      changed = true;
     }
+  }
 
+  if (changed) {
     saveData(data);
   }
 

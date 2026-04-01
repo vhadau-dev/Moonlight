@@ -19,20 +19,24 @@ moon({
         });
       }
 
-      const mentionedJid =
-        m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+      // Get target user (mention or reply)
+      const contextInfo = m.message?.extendedTextMessage?.contextInfo;
+      const targetJid = contextInfo?.mentionedJid?.[0] || contextInfo?.participant;
 
-      if (!mentionedJid) {
-        return reply("❌ Tag someone to trade with.");
+      if (!targetJid) {
+        return reply("❌ Tag or reply to someone to trade with.");
       }
 
-      const receiverNumber = mentionedJid.split('@')[0];
+      const receiverNumber = targetJid.split('@')[0];
 
       if (receiverNumber === senderNumber) {
         return reply("❌ You cannot trade with yourself.");
       }
 
-      const cardId = args[0]?.toUpperCase();
+      // If replying, cardId is in args[0]. If mentioning, cardId is in args[1] or args[0] if mention is at end.
+      // But usually it's .trade @user cardId
+      const isReply = contextInfo?.participant && !contextInfo?.mentionedJid?.[0];
+      const cardId = (isReply ? args[0] : (args[1] || args[0]))?.toUpperCase();
       if (!cardId) {
         return reply("❌ Provide a Card ID.\nExample: .trade @user ABC123");
       }

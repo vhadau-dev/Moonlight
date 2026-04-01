@@ -151,15 +151,3 @@ moon({
     }
   }
 });
-      if (!user) return reply("❌ User not found.");
-
-      user.profileImage = url;
-      await user.save();
-
-      reply("✅ Your profile picture has been updated!");
-    } catch (err) {
-      console.error("setp error:", err);
-      reply("❌ Failed to set profile image. Please try again.");
-    }
-  }
-});

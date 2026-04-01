@@ -1,11 +1,11 @@
-const yts = require("yt-search");
-const axios = require("axios");
-
 moon({
   name: "play",
   category: "tools",
+  cooldown: 10,
   async execute(sock, jid, sender, args, m, { reply }) {
     try {
+      const yts = require("yt-search");
+      const axios = require("axios");
       if (!args.length) {
         return reply("❌ Example: .play alan walker faded");
       }
