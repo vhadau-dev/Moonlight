@@ -26,27 +26,21 @@ async function generateProfileImage(userData) {
   const DEFAULT_BG = 'https://files.catbox.moe/d04wzu.jpg';
 
   // ── 1. Background ──────────────────────────────────────────────────────────
-  // If transparent is requested, we skip the background and overlay
-  if (!userData.transparent) {
-    try {
-      const bgImg = await loadImage(userData.background || DEFAULT_BG);
-      ctx.drawImage(bgImg, 0, 0, width, height);
-    } catch {
-      const grad = ctx.createLinearGradient(0, 0, width, height);
-      grad.addColorStop(0, '#0f0c29');
-      grad.addColorStop(0.5, '#302b63');
-      grad.addColorStop(1, '#24243e');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, width, height);
-    }
-
-    // ── 2. Dark overlay ────────────────────────────────────────────────────────
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  try {
+    const bgImg = await loadImage(userData.background || DEFAULT_BG);
+    ctx.drawImage(bgImg, 0, 0, width, height);
+  } catch {
+    const grad = ctx.createLinearGradient(0, 0, width, height);
+    grad.addColorStop(0, '#0f0c29');
+    grad.addColorStop(0.5, '#302b63');
+    grad.addColorStop(1, '#24243e');
+    ctx.fillStyle = grad;
     ctx.fillRect(0, 0, width, height);
-  } else {
-    // Clear canvas for transparency
-    ctx.clearRect(0, 0, width, height);
   }
+
+  // ── 2. Dark overlay ────────────────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+  ctx.fillRect(0, 0, width, height);
 
   // ── 3. Bank / Wallet – top-left ────────────────────────────────────────────
   ctx.shadowColor = 'rgba(0,0,0,0.9)';
