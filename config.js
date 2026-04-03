@@ -42,12 +42,7 @@ module.exports = {
     "120363402830334439@g.us"
   ],
   
-  // Groups where antilink/antimention are allowed to run
-  // Leave empty [] to allow in all groups
-  MODERATION_GROUPS: [
-    "120363423446381521@g.us",
-    "120363402830334439@g.us"
-  ],
+
 
   /* =========================
      🖼️ MEDIA / IMAGES

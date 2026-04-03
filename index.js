@@ -202,13 +202,7 @@ async function startBot() {
               // Quick-exit: skip metadata fetch when both features are disabled
               const alSettings = getAntilink(jid);
               const amSettings = getAntimention(jid);
-              
-              // Check if moderation is restricted to specific groups in config
-              const isRestrictedGroup = config.MODERATION_GROUPS && config.MODERATION_GROUPS.length > 0 
-                ? config.MODERATION_GROUPS.includes(jid) 
-                : true;
-
-              const needsCheck = isRestrictedGroup && (alSettings?.enabled || amSettings?.enabled);
+              const needsCheck = alSettings?.enabled || amSettings?.enabled;
 
               // Check if sender is admin (admins are exempt)
               let senderIsAdmin = false;
