@@ -15,37 +15,14 @@ function isOwner(number) {
   return config.OWNER_NUMBERS?.includes(number);
 }
 
-// ── Helper: convert video buffer → 5-second GIF buffer via ffmpeg ──────────
-async function videoToGif(videoBuffer) {
-  const tmpDir   = os.tmpdir();
-  const inFile   = path.join(tmpDir, `ml_vbg_${Date.now()}.mp4`);
-  const outFile  = path.join(tmpDir, `ml_vbg_${Date.now()}.gif`);
-
-  try {
-    fs.writeFileSync(inFile, videoBuffer);
-
-    // Trim to first 5 s, scale to 800px wide, 15 fps, decent quality
-    execSync(
-      `ffmpeg -y -t 5 -i "${inFile}" -vf "fps=15,scale=800:-1:flags=lanczos" -loop 0 "${outFile}"`,
-      { stdio: 'pipe' }
-    );
-
-    const gifBuffer = fs.readFileSync(outFile);
-    return gifBuffer;
-  } finally {
-    try { fs.unlinkSync(inFile);  } catch {}
-    try { fs.unlinkSync(outFile); } catch {}
-  }
-}
-
 // ── Helper: upload buffer to Catbox.moe ────────────────────────────────────
-async function uploadToCatbox(buffer, extension = 'gif') {
+async function uploadToCatbox(buffer, extension = 'mp4') {
   const form = new FormData();
   form.append('reqtype', 'fileupload');
   form.append('userhash', '');
   form.append('fileToUpload', buffer, {
     filename: `vbg.${extension}`,
-    contentType: `image/${extension}`
+    contentType: extension === 'mp4' ? 'video/mp4' : `image/${extension}`
   });
 
   const response = await axios.post('https://catbox.moe/user/api.php', form, {
@@ -54,6 +31,34 @@ async function uploadToCatbox(buffer, extension = 'gif') {
   });
 
   return (response.data || '').trim();
+}
+
+// ── Helper: overlay image onto video using ffmpeg ──────────────────────────
+async function overlayImageOnVideo(videoUrl, imageBuffer) {
+  const tmpDir    = os.tmpdir();
+  const timestamp = Date.now();
+  const imgFile   = path.join(tmpDir, `ml_overlay_${timestamp}.png`);
+  const outFile   = path.join(tmpDir, `ml_final_${timestamp}.mp4`);
+
+  try {
+    fs.writeFileSync(imgFile, imageBuffer);
+
+    // ffmpeg command:
+    // 1. Take video from URL
+    // 2. Take image from file
+    // 3. Scale image to fit video width (maintaining aspect ratio)
+    // 4. Overlay image in the center
+    // 5. Output as mp4
+    execSync(
+      `ffmpeg -y -i "${videoUrl}" -i "${imgFile}" -filter_complex "[1:v]scale=800:-1[img];[0:v][img]overlay=(W-w)/2:(H-h)/2" -c:a copy -t 5 "${outFile}"`,
+      { stdio: 'pipe' }
+    );
+
+    return fs.readFileSync(outFile);
+  } finally {
+    try { fs.unlinkSync(imgFile); } catch {}
+    try { fs.unlinkSync(outFile); } catch {}
+  }
 }
 
 // ── .profile / .p ──────────────────────────────────────────────────────────
@@ -92,26 +97,6 @@ moon({
       const wallet = user.balance || 0;
       const bank   = user.bank   || 0;
 
-      // ── Decide background ─────────────────────────────────────────────────
-      let backgroundForCard = user.backgroundImage || null;
-      let videoGifUrl       = null;
-
-      if (isOwner(targetNumber) && user.videoBackground) {
-        videoGifUrl = user.videoBackground;
-      }
-
-      // Generate stylized profile image (static canvas card)
-      const profileBuffer = await generateProfileImage({
-        username:     user.username || pushName || 'N/A',
-        role:         role,
-        pfp:          pfp,
-        background:   backgroundForCard,
-        bio:          user.bio || '.',
-        wallet:       wallet,
-        bank:         bank,
-        messageCount: user.messageCount || 0
-      });
-
       const registeredDate = moment(user.createdAt).format('DD/MM/YYYY');
       const bannedStatus   = user.banned ? "Yes ❌" : "No ✅";
       const total          = wallet + bank;
@@ -144,41 +129,61 @@ ${user.bio || 'No bio set'}
 🌙 Moonlight Haven
       `.trim();
 
-      // ── Send profile card ─────────────────────────────────────────────────
-      if (videoGifUrl) {
-        // Owner with video background: send GIF (plays in chat) + profile card
-        await sock.sendMessage(
-          jid,
-          {
-            video:    { url: videoGifUrl },
-            gifPlayback: true,
-            caption:  '🎬 *Profile Background*',
-            mentions: [target]
-          },
-          { quoted: m }
-        );
+      // ── Handle Video Background for Owners ────────────────────────────────
+      if (isOwner(targetNumber) && user.videoBackground) {
+        try {
+          // Generate transparent profile card
+          const transparentCard = await generateProfileImage({
+            username:     user.username || pushName || 'N/A',
+            role:         role,
+            pfp:          pfp,
+            transparent:  true,
+            bio:          user.bio || '.',
+            wallet:       wallet,
+            bank:         bank,
+            messageCount: user.messageCount || 0
+          });
 
-        return sock.sendMessage(
-          jid,
-          {
-            image:    profileBuffer,
-            caption:  msg,
-            mentions: [target]
-          },
-          { quoted: m }
-        );
-      } else {
-        // Regular users / owners without video bg: single image card
-        return sock.sendMessage(
-          jid,
-          {
-            image:    profileBuffer,
-            caption:  msg,
-            mentions: [target]
-          },
-          { quoted: m }
-        );
+          // Overlay onto video
+          const finalVideoBuffer = await overlayImageOnVideo(user.videoBackground, transparentCard);
+
+          return sock.sendMessage(
+            jid,
+            {
+              video:    finalVideoBuffer,
+              gifPlayback: true,
+              caption:  msg,
+              mentions: [target]
+            },
+            { quoted: m }
+          );
+        } catch (err) {
+          console.error("Video overlay error:", err);
+          // Fallback to static image if overlay fails
+        }
       }
+
+      // ── Default: Static Image Card ────────────────────────────────────────
+      const profileBuffer = await generateProfileImage({
+        username:     user.username || pushName || 'N/A',
+        role:         role,
+        pfp:          pfp,
+        background:   user.backgroundImage || null,
+        bio:          user.bio || '.',
+        wallet:       wallet,
+        bank:         bank,
+        messageCount: user.messageCount || 0
+      });
+
+      return sock.sendMessage(
+        jid,
+        {
+          image:    profileBuffer,
+          caption:  msg,
+          mentions: [target]
+        },
+        { quoted: m }
+      );
 
     } catch (err) {
       console.error("profile error:", err);
@@ -221,12 +226,10 @@ moon({
     try {
       const senderNumber = sender.split('@')[0];
 
-      // ── Owner-only gate ───────────────────────────────────────────────────
       if (!isOwner(senderNumber)) {
         return reply("⛔ Only bot owners can set a video background.");
       }
 
-      // ── Must reply to a video ─────────────────────────────────────────────
       const contextInfo = m.message?.extendedTextMessage?.contextInfo;
       const quotedMsg   = contextInfo?.quotedMessage;
 
@@ -234,9 +237,8 @@ moon({
         return reply("❌ Please *reply to a video* with `.setvbc` to set your video background.");
       }
 
-      await reply("⏳ Processing your video background (trimming to 5s & converting to GIF)...");
+      await reply("⏳ Processing your video background...");
 
-      // ── Download the quoted video ─────────────────────────────────────────
       const videoBuffer = await downloadMediaMessage(
         {
           message: quotedMsg,
@@ -255,39 +257,23 @@ moon({
       );
 
       if (!videoBuffer || !videoBuffer.length) {
-        return reply("❌ Failed to download the video. Please try again.");
+        return reply("❌ Failed to download the video.");
       }
 
-      // ── Convert to 5-second GIF ───────────────────────────────────────────
-      let gifBuffer;
-      try {
-        gifBuffer = await videoToGif(videoBuffer);
-      } catch (ffErr) {
-        console.error("ffmpeg error:", ffErr);
-        return reply("❌ Failed to process the video. Make sure it is a valid video file.");
-      }
+      // Upload original video to Catbox
+      const catboxUrl = await uploadToCatbox(videoBuffer, 'mp4');
 
-      // ── Upload to Catbox ──────────────────────────────────────────────────
-      let catboxUrl;
-      try {
-        catboxUrl = await uploadToCatbox(gifBuffer);
-      } catch (upErr) {
-        console.error("Catbox upload error:", upErr);
-        return reply("❌ Failed to upload video background to server.");
-      }
-
-      // ── Save URL on the user document ─────────────────────────────────────
       const user = await findOrCreateWhatsApp(sender, pushName);
       if (!user) return reply("❌ User not found.");
 
       user.videoBackground = catboxUrl;
       await user.save();
 
-      reply("✅ Your *video background* has been set! It will play as a GIF when someone views your profile. 🎬");
+      reply("✅ Your *video background* has been set! It will now be integrated into your profile card. 🎬");
 
     } catch (err) {
       console.error("setvbc error:", err);
-      reply("❌ Failed to set video background. Please try again.");
+      reply("❌ Failed to set video background.");
     }
   }
 });
