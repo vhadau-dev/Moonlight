@@ -1,77 +1,102 @@
 const Card = require('../models/Card');
+const GroupSpawn = require('../models/GroupSpawn');
+const config = require('../config');
+const axios = require('axios');
+const { generateCardImage } = require('../utils/cardGenerator');
 
-let activeCard = null;
-global.activeCard = null;
-
-// Spawn settings (controlled externally by your .spawn command)
-let spawnSettings = {
-  enabled: true
-};
-
-function setSpawnEnabled(value) {
-  spawnSettings.enabled = value;
-}
-
-function isSpawnEnabled() {
-  return spawnSettings.enabled;
+// ================= ID GENERATOR =================
+function generateId(length = 6) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let id = '';
+  for (let i = 0; i < length; i++) {
+    id += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return id;
 }
 
 /**
- * Spawn a random UNOWNED card
+ * Spawn a card in a specific group
+ * @param {Object} sock - Baileys socket
+ * @param {string} jid - Group JID
+ * @param {Object} card - Optional pre-generated card to spawn the same one in multiple groups
  */
-async function spawnCard(sock, jid) {
+async function spawnCard(sock, jid, card = null) {
   try {
-    if (!spawnSettings.enabled) {
-      console.log("⛔ Spawn is disabled.");
-      return;
+    let targetCard = card;
+    
+    if (!targetCard) {
+      // Fetch random character from Jikan API
+      const randomId = Math.floor(Math.random() * 5000) + 1;
+      const res = await axios.get(`https://api.jikan.moe/v4/characters/${randomId}/full`).catch(() => null);
+      if (!res?.data?.data) return null;
+
+      const char = res.data.data;
+      const tiers = ["1", "2", "3", "4", "5", "6"];
+      const tier = tiers[Math.floor(Math.random() * tiers.length)];
+      const cardId = generateId();
+
+      const exists = await Card.findOne({ cardId });
+      if (exists) return null;
+
+      targetCard = await Card.create({
+        cardId,
+        name: char.name,
+        tier,
+        atk: Math.floor(Math.random() * 5000) + 1000,
+        def: Math.floor(Math.random() * 5000) + 1000,
+        level: 1,
+        image: char.images?.jpg?.image_url,
+        description: char.about || "No description available.",
+        owner: null,
+        isEquipped: false,
+        source: "spawn"
+      });
     }
 
-    // Prevent multiple active spawns
-    if (global.activeCard) {
-      console.log("⚠️ Card already active. Skipping spawn.");
-      return;
-    }
+    // Generate the card image
+    const cardBuffer = await generateCardImage(targetCard);
 
-    // Only unowned cards
-    const cards = await Card.find({
-      image: { $ne: null },
-      owner: null
-    });
-
-    if (!cards.length) {
-      console.log("❌ No available cards to spawn.");
-      return;
-    }
-
-    const card = cards[Math.floor(Math.random() * cards.length)];
-
-    // Mark as spawned (source tracking instead of claimedBy)
-    card.source = "spawn";
-    await card.save();
-
-    global.activeCard = card;
-
-    console.log(`🎴 Spawned card: ${card.cardId}`);
-
+    // Send the card to the group
     await sock.sendMessage(jid, {
-      image: { url: card.image },
-      caption: `
-🎴 *𝚳𝚯𝚯𝚴𝐋𝚰𝐆𝚮𝚻 Card Appeared!*
-
-⭐ *Name:* ${card.name}
-🎭 *Tier:* ${card.tier}
-⚔️ *ATK:* ${card.atk}
-🛡️ *DEF:* ${card.def}
-
-🔐 *ID:* ${card.cardId}
-
-Use *.claim ${card.cardId}* to claim!
-      `.trim()
+      image: cardBuffer,
+      caption: `🃏 *${config.BOT_NAME} SPAWN EVENT* 🃏\n\nUse *.claim ${targetCard.cardId}* to collect it!`
     });
+
+    return targetCard;
 
   } catch (err) {
-    console.error("❌ spawnCard error:", err);
+    console.error(`[CardsSystem] Spawn error in ${jid}:`, err);
+    return null;
   }
+}
+
+/**
+ * Automatically spawns cards in all enabled groups every 35 minutes.
+ */
+function startCardSystem(sock) {
+  console.log("🎴 Card Auto-Spawn System started (Interval: 35m)");
+
+  setInterval(async () => {
+    try {
+      // Find all groups that have spawning enabled in database/group.json (via GroupSpawn model)
+      const enabledGroups = await GroupSpawn.find({ enabled: true });
+      
+      if (enabledGroups.length === 0) {
+        console.log("[CardsSystem] No groups have spawning enabled. Skipping.");
+        return;
+      }
+
+      console.log(`[CardsSystem] Spawning cards in ${enabledGroups.length} groups...`);
+
+      let spawnedCard = null;
+      for (const group of enabledGroups) {
+        // Spawn the SAME card in all groups for this interval
+        spawnedCard = await spawnCard(sock, group.jid, spawnedCard);
+      }
+    } catch (err) {
+      console.error("[CardsSystem] Error in auto-spawn interval:", err);
+    }
+  }, 35 * 60 * 1000); // 35 minutes
 }
 
 /**
@@ -93,41 +118,16 @@ async function claimCard(cardId, userId) {
 
     await card.save();
 
-    global.activeCard = null;
-
     return { success: true, card };
 
   } catch (err) {
-    console.error("❌ claimCard error:", err);
+    console.error("[CardsSystem] Claim failed:", err);
     return { error: "Claim failed." };
   }
 }
 
-/**
- * Manual spawn trigger (used by your .spawn force)
- */
-async function forceSpawn(sock, jid) {
-  return await spawnCard(sock, jid);
-}
-
-/**
- * Controlled auto-spawn loop (ONLY runs if enabled)
- * IMPORTANT: This does NOT restart spawning after bot restart unless you call it again
- */
-function startCardSystem(sock, jid) {
-  console.log("🎴 Card system initialized");
-
-  setInterval(async () => {
-    if (!spawnSettings.enabled) return;
-    await spawnCard(sock, jid);
-  }, 60 * 60 * 1000); // every 1 hour
-}
-
 module.exports = {
   spawnCard,
-  forceSpawn,
-  claimCard,
   startCardSystem,
-  setSpawnEnabled,
-  isSpawnEnabled
+  claimCard
 };

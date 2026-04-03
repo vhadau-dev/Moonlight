@@ -41,7 +41,7 @@ const {
 const { commands, aliases } = require('./handler/cmds');
 
 // ✅ CARD SYSTEM (Must be after commands are loaded)
-const { startAutoSpawn, spawnCard } = require('./commands/cards/spawn');
+const { startCardSystem, spawnCard } = require('./handler/CardsSystem');
 
 // ---------------- SAFETY ----------------
 if (!SESSION_FOLDER) throw new Error('SESSION_FOLDER is undefined!');
@@ -92,7 +92,7 @@ async function startBot() {
         }
 
         // ✅ START CARD SYSTEM (35m Auto-Spawn)
-        startAutoSpawn(sock);
+        startCardSystem(sock);
 
         // ✅ FORCE SPAWN ON START (Only in enabled groups)
         (async () => {
