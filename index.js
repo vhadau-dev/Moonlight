@@ -18,8 +18,6 @@ const { findOrCreateWhatsApp } = require('./database/users');
 
 // ✅ HANDLERS
 const OwnersMeme = require('./handler/OwnersMeme');
-const { startAutoSpawn } = require('./commands/cards/spawn');
-const { spawnCard } = require('./commands/cards/spawn');
 
 const config = require('./config');
 const {
@@ -41,6 +39,9 @@ const {
 
 // Commands
 const { commands, aliases } = require('./handler/cmds');
+
+// ✅ CARD SYSTEM (Must be after commands are loaded)
+const { startAutoSpawn, spawnCard } = require('./commands/cards/spawn');
 
 // ---------------- SAFETY ----------------
 if (!SESSION_FOLDER) throw new Error('SESSION_FOLDER is undefined!');
