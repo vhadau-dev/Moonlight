@@ -74,11 +74,17 @@ async function isCDC(sender) {
   return user.isTrueOwner || user.role === 'Owner' || user.role === 'True Owner' || user.isCDC === true;
 }
 
+async function isRegistered(sender) {
+  const user = await findOrCreateWhatsApp(sender);
+  return user.isRegistered === true;
+}
+
 module.exports = { 
   findOrCreateWhatsApp, 
   userCache,
   isTrueOwner,
   isOwner,
   isMod,
-  isCDC
+  isCDC,
+  isRegistered
 };

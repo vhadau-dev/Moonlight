@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../config');
-const { findOrCreateWhatsApp, isTrueOwner, isOwner, isMod, isCDC } = require('../database/users');
+const { findOrCreateWhatsApp, isTrueOwner, isOwner, isMod, isCDC, isRegistered } = require('../database/users');
 
 // ---------------- STORAGE ----------------
 const commands = new Map();
@@ -81,6 +81,19 @@ for (const cmd of commands.values()) {
     const startTime = Date.now();
 
     try {
+      // 🔒 REGISTRATION LOCK (ECONOMY & GAMBLING)
+      if (cmd.category === 'economy' || cmd.category === 'gambling') {
+        const registered = await isRegistered(sender);
+        if (!registered && cmd.name !== 'reg') {
+          return context.reply(
+            `⚠️ *ECONOMY LOCKED* ⚠️\n\n` +
+            `You must register before you can use economy or gambling commands.\n\n` +
+            `👉 Use: *.reg <your_age>*\n` +
+            `_Note: You must be between 13 and 35 years old._`
+          );
+        }
+      }
+
       // 🔒 LOCK GAMBLING CMDS
       if (cmd.category === 'gambling') {
         if (!isAllowedGroup(jid)) {
@@ -119,6 +132,7 @@ https://chat.whatsapp.com/KAG8xDAJmYODIZPWEcntCX`
       context.isOwner = async () => await isOwner(sender);
       context.isMod = async () => await isMod(sender);
       context.isCDC = async () => await isCDC(sender);
+      context.isRegistered = async () => await isRegistered(sender);
 
       // ▶️ RUN COMMAND
       const result = await originalExecute(sock, jid, sender, args, m, context);
