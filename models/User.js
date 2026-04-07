@@ -30,10 +30,12 @@ const userSchema = new mongoose.Schema({
     enum: ['User', 'Mod', 'Owner', 'True Owner', 'CDC'], 
     default: 'User' 
   },
-  isTrueOwner: { type: Boolean, default: false }, // Cannot be dem  isCDC: { type: Boolean, default: false }, // Card Creator
+  isTrueOwner: { type: Boolean, default: false }, // Cannot be demoted
+  isCDC: { type: Boolean, default: false }, // Card Creator
   isRegistered: { type: Boolean, default: false }, // Mandatory registration
-35	
-36	  // ---------------- PROFILE SYSTEM ----------------  profileImage: { type: String, default: null },
+
+  // ---------------- PROFILE SYSTEM ----------------
+  profileImage: { type: String, default: null },
   backgroundImage: { type: String, default: null },
   videoBackground: { type: String, default: null },
   age: { type: Number, default: 0 },
